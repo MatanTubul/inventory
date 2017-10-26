@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c2763994-3679-45e9-9fff-e216ff40d730" name="Default" comment="" />
+    <list default="true" id="c2763994-3679-45e9-9fff-e216ff40d730" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/controllers/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/controllers/routes.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/controllers/templates/test.html" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +53,7 @@
                 <entry file="file://$PROJECT_DIR$/templates/signup.html">
                   <provider selected="true" editor-type-id="text-editor">
                     <state relative-caret-position="360">
-                      <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="36" selection-end-column="8" />
+                      <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="36" selection-end-column="8" />
                       <folding />
                     </state>
                   </provider>
@@ -68,7 +73,7 @@
                 <entry file="file://$PROJECT_DIR$/templates/index.html">
                   <provider selected="true" editor-type-id="text-editor">
                     <state relative-caret-position="108">
-                      <caret line="6" column="69" lean-forward="true" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="69" />
+                      <caret line="6" column="69" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="69" />
                       <folding />
                     </state>
                   </provider>
@@ -158,7 +163,7 @@
             <entry file="file://$PROJECT_DIR$/static/js/home.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="2448">
-                  <caret line="136" column="42" lean-forward="true" selection-start-line="136" selection-start-column="8" selection-end-line="136" selection-end-column="42" />
+                  <caret line="136" column="42" lean-forward="false" selection-start-line="136" selection-start-column="8" selection-end-line="136" selection-end-column="42" />
                   <folding />
                 </state>
               </provider>
@@ -168,7 +173,7 @@
             <entry file="file://$PROJECT_DIR$/static/js/signIn.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="1116">
-                  <caret line="62" column="35" lean-forward="true" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="35" />
+                  <caret line="62" column="35" lean-forward="false" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="35" />
                   <folding />
                 </state>
               </provider>
@@ -503,7 +508,7 @@
       <workItem from="1508744414699" duration="22552000" />
       <workItem from="1508828144221" duration="11319000" />
       <workItem from="1508913742526" duration="35516000" />
-      <workItem from="1509016687415" duration="126000" />
+      <workItem from="1509016687415" duration="735000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1508756814079</created>
@@ -537,7 +542,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="98600000" />
+    <option name="totallyTimeSpent" value="99209000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -866,7 +871,7 @@
     <entry file="file://$PROJECT_DIR$/static/js/home.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2448">
-          <caret line="136" column="42" lean-forward="true" selection-start-line="136" selection-start-column="8" selection-end-line="136" selection-end-column="42" />
+          <caret line="136" column="42" lean-forward="false" selection-start-line="136" selection-start-column="8" selection-end-line="136" selection-end-column="42" />
           <folding />
         </state>
       </provider>
@@ -874,7 +879,7 @@
     <entry file="file://$PROJECT_DIR$/static/js/signIn.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1116">
-          <caret line="62" column="35" lean-forward="true" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="35" />
+          <caret line="62" column="35" lean-forward="false" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="35" />
           <folding />
         </state>
       </provider>
@@ -940,7 +945,7 @@
     <entry file="file://$PROJECT_DIR$/templates/signup.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="36" selection-end-column="8" />
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="36" selection-end-column="8" />
           <folding />
         </state>
       </provider>
@@ -948,7 +953,7 @@
     <entry file="file://$PROJECT_DIR$/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
-          <caret line="6" column="69" lean-forward="true" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="69" />
+          <caret line="6" column="69" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="69" />
           <folding />
         </state>
       </provider>

@@ -5,7 +5,7 @@ from flask import session
 from flask import json
 from db import DbConnection
 from werkzeug import generate_password_hash, check_password_hash
-
+from . import
 app = Flask(__name__)
 
 db = DbConnection(app)
