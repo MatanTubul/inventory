@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sign In</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+  <link rel="icon" href="../static/images/favicons.png">
+  <script src="../static/js/signIn.js"></script>
+  <link href="../static/css/main.css" rel="stylesheet">
+  <link href="../static/css/signin.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="global-container">
+  <div class="header">
+
+  </div>
+  <div  class="container">
+    <div class="card card-container">
+      <img id="profile-img" class="profile-img-card" src="../static/images/wintego.png" />
+      <form class="form-signin" id="formLogin" >
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input  type="email" name="inputEmail" id="inputEmail" class="form-control sign-in-inputs" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="inputPassword" id="inputPassword" class="form-control sign-in-inputs" placeholder="Password" required>
+        <button id="btnSignIn" class="btn btn-lg btn-primary btn-block" type="button">Sign in</button>
+      </form>
+      <a href="forgotPassword" class="forgot-password">
+        Forgot the password?
+      </a>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modalResponse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header modal-header-ok" id="modalOnResponseHeader">
+        <h5 class="modal-title" id="modalResponseTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalResponseBody">
+
+      </div>
+      <div class="modal-footer">
+        <button id="btnCloseResponseModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
