@@ -1,0 +1,49 @@
+
+
+
+
+
+.invalid {
+    color: red;
+}
+
+.footer {
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 50px;
+}
+.user-name{
+    color: #0080c8;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+.nav-pills>li {
+    float: right;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    color: white;
+}
+.modal-body {
+    font-weight: bold;
+}
+.modal-content {
+    width:500px ;
+}
+
+.modal-header-ok {
+    background-color: #3FC59D;
+    /*#E2747E error color*/
+}
+.btn-secondary {
+    background-color: #E2747E;
+    color: white;
+    font-weight: bold;
+}
+.btn-primary {
+    background-color: #0080c8;
+}

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Wintego Inventory</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+    <script src="../static/js/home.js"></script>
+    <link rel="icon" href="../static/images/favicons.png">
+    <link href="../static/css/home.css" rel="stylesheet">
+    <link href="../static/css/main.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">Phones</a></li>
+            <li><a href="#">Wint</a></li>
+            <li><a href="#">Licenses</a></li>
+            {% if role == 'admin' %}
+            <li><a href="showSignUp">Create User</a></li>
+            {% endif %}
+            <div>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active">
+                        <a href="/logout" class="fa fa-sign-out " title="LogOut">
+                            <span class="glyphicons glyphicons-log-out" ></span></a>
+                    </li>
+                    <li class="user-name"> Welcome {{user}}</li>
+                </ul>
+            </div>
+        </ul>
+    </div>
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default panel-table results">
+                <div class="panel-heading">
+
+                    <div class="row">
+                        <div class="form-group pull-right searcher">
+                            <input type="text" class="search form-control" placeholder="What you looking for?">
+                        </div>
+                        <div class="">
+                            <button type="button" title="Create new device" class="btn btn-sm btn-primary btn-create create-device-btn" data-toggle="modal" data-target="#createDevice">Add Device</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover table-bordered table-list" id="deviceTable">
+                        <thead>
+                        <tr>
+                            <th><em class="fa fa-cog"></em></th>
+                            <th class="hidden-xs">#</th>
+                            <th>Device Name</th>
+                            <th>Account</th>
+                            <th>Mac Address</th>
+                            <th>Phone Number</th>
+                            <th>Owner</th>
+                            <th>OS</th>
+                            <th>Version</th>
+                        </tr>
+                        <tr class="warning no-result">
+                            <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for device in devices %}
+                        <tr >
+
+                            <td  align="center"  >
+                                <a class="btn  btn-lock-clicked" title="Lock device" >
+                                    <em class="fa fa-lock"></em>
+                                </a>
+                                {% if role == 'admin' %}
+                                <a class="btn btn-default btn-default-clicked" title="Edit device"  >
+                                    <em class="fa fa-pencil"></em>
+                                </a>
+                                <a class="btn btn-danger btn-danger-clicked" title="Delete device" >
+                                    <em class="fa fa-trash"></em>
+                                </a>
+                                {% endif %}
+
+                            </td>
+
+                            <td class="hidden-xs">{{loop.index}}</td>
+                            <td class="deviceName">{{device[1]}}</td>
+                            <td class="account">{{device[2]}}</td>
+                            <td class="macAddress">{{device[3]}}</td>
+                            <td class="phoneNumber">{{device[4]}}</td>
+                            <td class="owner">{{device[5]}}</td>
+                            <td class="os">{{device[6]}}</td>
+                            <td class="osVersion">{{device[7]}}</td>
+                        </tr>
+                        {% else %}
+                        <tr class="warning">
+                            <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <span class="counter "></span>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="createDevice" tabindex="-1" role="dialog" aria-labelledby="createDeviceLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createDeviceLabel">Add device</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="createDeviceForm" id="createDeviceForm" >
+                    <div class="form-group">
+                        <input type="text" name="inputDeviceName" id="inputDeviceName" class="form-control" placeholder="Device Name" autofocus/>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="inputAccount" id="inputAccount" class="form-control" placeholder="Email Account" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text"  name="inputMacAddress" id="inputMacAddress"  class="form-control" placeholder="Mac Address"  />
+                    </div>
+                    <div class="form-group">
+                        <input type="text"  name="inputPhoneNumber" id="inputPhoneNumber"  class="form-control" placeholder="Phone Number"  />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="inputOwner" id="inputOwner" class="form-control" placeholder="Owner"/>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control"  name="inputOs" id="inputOs" >
+                            <option value="Android">Android</option>
+                            <option value="IOS">IOS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="inputOsVersion" id="inputOsVersion">
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnDeviceFormClose" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="btnCreateDevice" type="button" class="btn btn-primary" >Submit</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modalResponse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="responseModalTitle">Device created</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalResponseBody">
+                Device  is successfully created
+            </div>
+            <div class="modal-footer">
+                <button id="createDeviceOkResponse" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- start: Delete Coupon Modal -->
+<div class="modal fade" id="approveDeviceDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Warning!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4> Are you sure you want to DELETE?</h4>
+            </div>
+            <!--/modal-body-collapse -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger " id="btnDelteYes" href="#">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+            <!--/modal-footer-collapse -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- edit device modal -->
+<div class="modal fade" id="editDevice" tabindex="-1" role="dialog" aria-labelledby="editDeviceLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editDeviceLabel">Edit device</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="editDeviceForm" id="editDeviceForm" >
+                    <div class="form-group">
+                        <input type="text" name="inputDeviceName" id="editDeviceName" class="form-control" placeholder="Device Name" autofocus/>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="inputAccount" id="editAccount" class="form-control" placeholder="Email Account" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text"  name="inputMacAddress" id="editMacAddress"  class="form-control" placeholder="Mac Address"  />
+                    </div>
+                    <div class="form-group">
+                        <input type="text"  name="inputPhoneNumber" id="editPhoneNumber"  class="form-control" placeholder="Phone Number"  />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="inputOwner" id="editOwner" class="form-control" placeholder="Owner"/>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control"  name="inputOs" id="editOs" >
+                            <option value="selectMessage" selected>Please Select OS</option>
+                            <option value="Android">Android</option>
+                            <option value="IOS">IOS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="inputOsVersion" id="editOsVersion">
+                            <option value="selectOsVersion">Please Select OS type</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnEditDeviceFormClose" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="btnEditDevice" type="button" class="btn btn-primary" >Save changes</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /edit device modal -->
+
+<footer class="footer">
+    <p> <h3><img src="../static/images/wintego.png"></h3></p>
+</footer>
+</body>
+
+</html>
