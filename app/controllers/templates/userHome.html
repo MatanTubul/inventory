@@ -76,13 +76,20 @@
                         </thead>
                         <tbody>
 
-                        {% for device in devices %}
+                        {% for value in devices %}
                         <tr >
 
                             <td  align="center"  >
+                                {% if not value["owner"] %}
                                 <a class="btn  btn-lock-clicked" title="Lock device" >
                                     <em class="fa fa-lock"></em>
                                 </a>
+                                {% endif %}
+                                {% if value["owner"] %}
+                                <a class="btn  btn-unlock-clicked" title="Unlock device" >
+                                    <em class="fa fa fa-unlock"></em>
+                                </a>
+                                {% endif %}
                                 {% if role == 'admin' %}
                                 <a class="btn btn-default btn-default-clicked" title="Edit device"  >
                                     <em class="fa fa-pencil"></em>
@@ -95,13 +102,13 @@
                             </td>
 
                             <td class="hidden-xs">{{loop.index}}</td>
-                            <td class="deviceName">{{device[1]}}</td>
-                            <td class="account">{{device[2]}}</td>
-                            <td class="macAddress">{{device[3]}}</td>
-                            <td class="phoneNumber">{{device[4]}}</td>
-                            <td class="owner">{{device[5]}}</td>
-                            <td class="os">{{device[6]}}</td>
-                            <td class="osVersion">{{device[7]}}</td>
+                            <td class="deviceName">{{value["name"]}}</td>
+                            <td class="account">{{value["account"]}}</td>
+                            <td class="macAddress">{{value["macAddress"]}}</td>
+                            <td class="phoneNumber">{{value["phoneNumber"]}}</td>
+                            <td class="owner">{{value["owner"]}}</td>
+                            <td class="os">{{value["os"]}}</td>
+                            <td class="osVersion">{{value["osVersion"]}}</td>
                         </tr>
                         {% else %}
                         <tr class="warning">
@@ -168,7 +175,7 @@
 <div class="modal fade" id="modalResponse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header modal-header-ok">
                 <h5 class="modal-title" id="responseModalTitle">Device created</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -183,7 +190,57 @@
         </div>
     </div>
 </div>
-<!-- start: Delete Coupon Modal -->
+<!-- start: unLock device Modal -->
+<div class="modal fade" id="unlockDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unlockDeviceTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="unlockModalBody">
+
+            </div>
+            <!--/modal-body-collapse -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary " id="btnUnLockYes" href="#">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+            <!--/modal-footer-collapse -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- start: Lock device Modal -->
+<div class="modal fade" id="lockDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lockDeviceTitle">Lock Device</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="lockModalBody">
+
+            </div>
+            <!--/modal-body-collapse -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary " id="btnLockYes" href="#">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+            <!--/modal-footer-collapse -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- start: Delete Device Modal -->
 <div class="modal fade" id="approveDeviceDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

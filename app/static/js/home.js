@@ -55,22 +55,26 @@ $(document).ready(function(){
     //handle create device request
     $('#btnCreateDevice').click(function(){
         if ($('#createDeviceForm').valid()){
-
             $.ajax({
                 url: '/createDevice',
                 data: $('form').serialize(),
                 type: 'POST',
                 success: function(response){
                     $('#createDevice').hide();
-                    $('#modalResponse').modal('show');
+                    if(response.hasOwnProperty('error')){
 
+                        $('#modalResponseTitle').text("Failed");
+                        $('#modalResponseBody').text("Failed to create device with error, "+res.error);
+                    }
+                    else{
+                        $('#modalResponse').modal('show');
+                    }
 
                 },
                 error: function(error){
                     console.log(error);
                 }
             });
-        }else{console.log(1);
         }
     });
 
@@ -80,6 +84,71 @@ $(document).ready(function(){
 
         }
 
+    });
+
+    //Handling lock device
+    $('body').on('click', '.btn-lock-clicked', function () {
+        var $tr = $(this).closest('tr');
+        $('#lockModalBody').text("Are you sure you want to lock device "+$tr.children('td.deviceName').text());
+        $('#approveDeviceDelete').data('mac', $tr.find(".macAddress").text());
+        $('#lockDevice').modal('show');
+    });
+    $('#btnLockYes').click(function () {
+        var mac = $('#approveDeviceDelete').data('mac');
+        $.ajax({
+            url: '/lockDevice',
+            data: {'mac_address':mac},
+            type: 'POST',
+            success: function(response){
+                $('#lockDevice').modal('hide');
+                if(response.hasOwnProperty('error')){
+                    $('#modalOnResponseHeader').css('background', '#E2747E');
+                    $('#modalResponseTitle').text("Failed");
+                    $('#modalResponseBody').text("Failed to lock device with error, "+response.error);
+                }else{
+                    $('#responseModalTitle').text("Locked");
+                    $('#modalResponseBody').text(response.message);
+                    $('#modalResponse').modal('show');
+                }
+
+            },
+            error: function(error){
+                // console.log(error);
+            }
+        });
+    });
+
+    //Handling unlock device
+    $('body').on('click', '.btn-unlock-clicked', function () {
+        var $tr = $(this).closest('tr');
+        $('#unlockModalBody').text("Are you sure you want to unlock device "+$tr.children('td.deviceName').text());
+        $('#unlockDeviceTitle').text('Unlock')
+        $('#unlockDevice').data('mac', $tr.find(".macAddress").text());
+        $('#unlockDevice').modal('show');
+    });
+    $('#btnUnLockYes').click(function () {
+        var mac = $('#unlockDevice').data('mac');
+        $.ajax({
+            url: '/unlockDevice',
+            data: {'mac_address':mac},
+            type: 'POST',
+            success: function(response){
+                $('#unlockDevice').modal('hide');
+                if(response.hasOwnProperty('error')){
+                    $('#modalOnResponseHeader').css('background', '#E2747E');
+                    $('#modalResponseTitle').text("Failed");
+                    $('#modalResponseBody').text("Failed to lock device with error, "+response.error);
+                }else{
+                    $('#responseModalTitle').text("Locked");
+                    $('#modalResponseBody').text(response.message);
+                    $('#modalResponse').modal('show');
+                }
+
+            },
+            error: function(error){
+                // console.log(error);
+            }
+        });
     });
 
     //Handling edit onClick event
@@ -118,9 +187,16 @@ $(document).ready(function(){
             type: 'POST',
             success: function(response){
                 $('#editDevice').modal('hide');
-                $('#responseModalTitle').text("Device updated");
-                $('#modalResponseBody').text("Device updated successfully");
-                $('#modalResponse').modal('show');
+                if(response.hasOwnProperty('error')){
+                    $('#modalOnResponseHeader').css('background', '#E2747E');
+                    $('#modalResponseTitle').text("Failed");
+                    $('#modalResponseBody').text("Failed to create device with error, "+res.error);
+                }else{
+                    $('#responseModalTitle').text("Device updated");
+                    $('#modalResponseBody').text("Device updated successfully");
+                    $('#modalResponse').modal('show');
+                }
+
             },
             error: function(error){
                 // console.log(error);
@@ -140,6 +216,7 @@ $(document).ready(function(){
     $('#btnEditDeviceFormClose').click(function(){
         $("#editDeviceForm").validate().resetForm();
 
+
     });
 
 //Handling delete onClick event
@@ -158,14 +235,20 @@ $(document).ready(function(){
     $('#btnDelteYes').click(function () {
         var mac = $('#approveDeviceDelete').data('mac');
         var rowIndex = $('#approveDeviceDelete').data('rowid');
-
+        console.log(rowIndex);
         $('#approveDeviceDelete').modal('hide');
         $.ajax({
             url: '/deleteDevice',
             data: {'mac_address':mac},
             type: 'POST',
             success: function(response){
-                $("tr").eq(rowIndex).remove();
+                if(response.hasOwnProperty('error')) {
+                    $('#modalOnResponseHeader').css('background', '#E2747E');
+                    $('#modalResponseTitle').text("Failed");
+                    $('#modalResponseBody').text("Failed to create device with error, " + res.error);
+                }else{
+                    window.location.reload();
+                }
             },
             error: function(error){
                 console.log(error);

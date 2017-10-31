@@ -59,7 +59,6 @@ $(document).ready(function() {
                 type: 'POST',
                 success: function (response) {
                 	var res = JSON.parse(response);
-                	console.log(res);
                 	if(res.hasOwnProperty('error')){
                         $('#modalOnResponseHeader').css('background', '#E2747E');
                         $('#modalResponseTitle').text("Failed");
