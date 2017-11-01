@@ -5,11 +5,18 @@ from flask import render_template, \
     session, \
     json, jsonify
 from werkzeug import generate_password_hash, check_password_hash
-# from app.db.connection import db_session,init_db
-from app import app, db
+from app import app
 from app.models import User, Device
+from app.database.utils import dbSetup, \
+    getDevicesList, \
+    filterSpecificObject, \
+    setDeviceIsDeleted, \
+    commitChanges, \
+    addObject, \
+    selectObject
 from app.utils.mail import mail
 from flask_mail import Message
+
 
 
 routes = Blueprint('controllers',
@@ -17,14 +24,14 @@ routes = Blueprint('controllers',
                    template_folder='templates')
 @app.before_first_request
 def setup():
-    db.create_all()
+    dbSetup()
 
 @routes.route("/")
 def main():
     # if session is active redirect to home page
     if session.get('user'):
         # cursor.callproc('get_devices_list')
-        devicesList = [u.__dict__ for u in db.session.query(Device).filter_by(isDeleted=0).all()]
+        devicesList = getDevicesList(Device)
         return render_template('userHome.html', devices = devicesList,
                                role=session.get('role'),
                                user=session.get('user')
@@ -42,7 +49,7 @@ def userHome():
 
     if session.get('user'):
         # cursor.callproc('get_devices_list')
-        devicesList = [u.__dict__ for u in db.session.query(Device).filter_by(isDeleted=0).all()]
+        devicesList = getDevicesList(Device)
         return render_template('userHome.html',
                                devices = devicesList,
                                role=session.get('role'),
@@ -61,11 +68,9 @@ def deleteDevice():
     res = ""
     try:
         mac = request.values.get('mac_address', None)
-        device = Device.query.filter_by(macAddress=mac).first()
-        device.isDeleted = 1
-        db.session.commit()
+        device = filterSpecificObject(Device, macAddress=mac)
+        setDeviceIsDeleted(device)
         res = {'message': 'Device deleted successfully'}
-
     except Exception as e:
         print e
         res = {'error': 'Delete device failed'}
@@ -100,14 +105,14 @@ def updateDevice():
     """
     res = "Update device failed"
     try:
-        device = Device.query.filter_by(macAddress=request.form['inputMacAddress']).first()
+        device = filterSpecificObject(Device, macAddress=request.form['inputMacAddress'])
         device.name = request.form['inputDeviceName']
         device.owner = request.form['inputOwner']
         device.phoneNumber = request.form['inputPhoneNumber']
         device.osVersion = request.form['inputOsVersion']
         device.account =  request.form['inputAccount']
         device.macAddress = request.form['inputMacAddress']
-        db.session.commit()
+        commitChanges()
         res = {'message':'Device updated successfully'}
     except Exception as e:
         print e
@@ -124,9 +129,10 @@ def createDevice():
     """
     try:
         res = {}
-        if (Device.query.filter_by(macAddress=request.form['inputMacAddress']).first()):
+        if (filterSpecificObject(Device, macAddress=request.form['inputMacAddress'])):
             res = {'error':'Device already exists'}
         else:
+
             device = Device(request.form['inputDeviceName'],
                             request.form['inputAccount'],
                             request.form['inputMacAddress'],
@@ -134,11 +140,8 @@ def createDevice():
                             request.form['inputOwner'],
                             request.form['inputOs'],
                             request.form['inputOsVersion'])
-            db.session.add(device)
-            db.session.commit()
+            addObject(device)
             res = {'message':'Device created successfully'}
-
-
     except Exception as e:
         print e
         res = {'error':'Failed to create device'}
@@ -160,15 +163,14 @@ def signUp():
         role = request.form['inputUserRule']
         hashed_password = generate_password_hash(password)
         # validate the received values
-        if (User.query.filter_by(username=email).first()):
+        if (filterSpecificObject(User, username=email)):
             res = {'error': 'User already exists'}
         else:
             u = User(email,
                      hashed_password,
                      name,
                      role)
-            db.session.add(u)
-            db.session.commit()
+            addObject(u)
             res = {'message': 'User created successfully !'}
     except Exception as e:
         print e
@@ -186,7 +188,7 @@ def validateLogin():
         username = request.form['inputEmail']
         password = request.form['inputPassword']
         # cursor.callproc('loginValidate',(username,))
-        user = User.query.filter_by(username=username).first()
+        user = filterSpecificObject(User, username=username)
 
         if user:
             if check_password_hash(str(user.password), password):
@@ -199,19 +201,20 @@ def validateLogin():
         else:
             return json.dumps({'error':'Wrong Email address or Password.'})
     except Exception as e:
-        print e
+        return jsonify({'error':'validateLogin failed'})
 
 @routes.route('/lockDevice', methods=['POST'])
 def lockDevice():
     try:
         res = {'error': 'Failed to lock device'}
-        device = Device.query.filter_by(macAddress=request.values.get('mac_address', None)).first()
+        device = filterSpecificObject(Device, macAddress=request.values.get('mac_address', None))
         if device:
             device.owner = session.get('userName')
-            db.session.commit()
+            commitChanges()
             res = {'message':'Device locked'}
     except Exception as e:
         print e
+        return jsonify(res)
     finally:
         return jsonify(res)
 
@@ -219,10 +222,10 @@ def lockDevice():
 def unlockDevice():
     try:
         res = {'error': 'Failed to unlock device'}
-        device = Device.query.filter_by(macAddress=request.values.get('mac_address', None)).first()
+        device = filterSpecificObject(Device, macAddress=request.values.get('mac_address', None))
         if device:
             device.owner = ''
-            db.session.commit()
+            commitChanges()
             res = {'message':'Device unlocked', 'title':'Unlocked'}
     except Exception as e:
         print e
@@ -233,7 +236,7 @@ def unlockDevice():
 def resetPassword():
     try:
         res = {'error':'Failed to restore password'}
-        user = User.query.filter_by(username=request.form['email']).first()
+        user = filterSpecificObject(User, username=request.form['email'])
         if user:
             token = user.generate_auth_token(1800)
             with mail.connect() as conn:
@@ -261,11 +264,18 @@ def authToken(token):
     user = User.verify_auth_token(token)
     if not user:
         return render_template('error.html', error='Unauthorized Access')
-    return render_template('reset_password.html')
-@routes.route('/genPassword')
-def genPassword():
-    """
-    Loading sign in page
-    :return: sign in template
-    """
-    return render_template('reset_password.html')
+    return render_template('reset_password.html', token=token)
+
+@routes.route('/updatePassword',methods=['POST'])
+def updatePassword():
+    user = User.verify_auth_token(request.values.get('token', None))
+    if not user:
+        return jsonify({'error':'Failed to update password'})
+    hashed_password = generate_password_hash(request.values.get('password', None))
+    user.password = hashed_password
+    commitChanges()
+    return jsonify({'message':'Password updated','title':'Update'})
+@routes.route('/getUsersList', methods=['GET', 'POST'])
+def getUsersList():
+    res = selectObject(User, User.username)
+    return jsonify(res)

@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+    loadUsers();
     $.validator.addMethod("regx", function(value, element, regexpr) {
         return regexpr.test(value);
     }, "Please enter a valid Mac Address.");
@@ -255,6 +255,36 @@ $(document).ready(function(){
             }
         });
     });
+    function loadUsers () {
+        $.ajax({
+            url: '/getUsersList',
+            data: {},
+            type: 'GET',
+            success: function (response) {
+                if (response.hasOwnProperty('error')) {
+                    $('#modalOnResponseHeader').css('background', '#E2747E');
+                    $('#modalResponseTitle').text("Failed");
+                    $('#modalResponseBody').text("Failed to create device with error, " + res.error);
+                } else {
+                    // window.location.reload();
+                    console.log(response);
+                    $.each( response, function( index, value ){
+                        $('#inputOwner').append($('<option/>', {
+                            value: value,
+                            text : value
+                        }));
+                        $('#editOwner').append($('<option/>', {
+                            value: value,
+                            text : value
+                        }));
+                    });
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
 
     //loading os version depend on  os type
     $('#inputOs').change(function () {
@@ -315,6 +345,7 @@ $(document).ready(function(){
         if(jobCount == '0') {$('.no-result').show();}
         else {$('.no-result').hide();}
     });
+
 
 });
 

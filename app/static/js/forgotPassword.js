@@ -61,7 +61,7 @@ $(document).ready(function(){
     });
 
     $('#btnCloseResponseModal').click(function(){
-        $("#createUserForm").validate().resetForm();
-        $("#createUserForm")[0].reset();
+        $("#register-form").validate().resetForm();
+        $("#register-form")[0].reset();
     });
 });
