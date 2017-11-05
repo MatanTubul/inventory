@@ -152,7 +152,7 @@ $(document).ready(function(){
     });
 
     //Handling edit onClick event
-    $('body').on('click','.btn-default-clicked',function(){
+    $('body').on('click','.btn-default-clicked', function(){
         var $tr = $(this).closest('tr');
         var $osVersions = $('#editOsVersion');
         $('#editDeviceName').val($tr.children('td.deviceName').text());
@@ -228,9 +228,6 @@ $(document).ready(function(){
         // $tr.remove();
     });
 
-
-
-
     //Delete selected device row
     $('#btnDelteYes').click(function () {
         var mac = $('#approveDeviceDelete').data('mac');
@@ -257,7 +254,7 @@ $(document).ready(function(){
     });
     function loadUsers () {
         $.ajax({
-            url: '/getUsersList',
+            url: '/getUserNamesList',
             data: {},
             type: 'GET',
             success: function (response) {

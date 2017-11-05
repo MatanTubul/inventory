@@ -1,9 +1,13 @@
 from app import db
 
+
 def dbSetup():
     db.create_all()
 
 def getDevicesList(object):
+    return [u.__dict__ for u in db.session.query(object).filter_by(isDeleted=0).all()]
+
+def getUsersList(object):
     return [u.__dict__ for u in db.session.query(object).filter_by(isDeleted=0).all()]
 
 def filterSpecificObject(object, **kwargs):
@@ -12,8 +16,8 @@ def filterSpecificObject(object, **kwargs):
         query = query.filter(getattr(object, key) == value)
     return query.first()
 
-def setDeviceIsDeleted(device):
-    device.isDeleted = 1
+def setObjectIsDeleted(object):
+    object.isDeleted = 1
     commitChanges()
 
 def commitChanges():
@@ -25,3 +29,7 @@ def addObject(object):
 
 def selectObject(object, *kwargs):
     return db.session.query(object).with_entities(*kwargs).all()
+
+def updateObject(object, updateDict):
+    db.session.query(object).update(updateDict)
+    commitChanges()

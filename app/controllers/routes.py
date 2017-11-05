@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import render_template, \
     Blueprint, \
     request, \
@@ -6,17 +7,17 @@ from flask import render_template, \
     json, jsonify
 from werkzeug import generate_password_hash, check_password_hash
 from app import app
-from app.models import User, Device
+from app.models import User, Device, History
 from app.database.utils import dbSetup, \
     getDevicesList, \
     filterSpecificObject, \
-    setDeviceIsDeleted, \
+    setObjectIsDeleted, \
     commitChanges, \
     addObject, \
-    selectObject
+    selectObject, \
+    getUsersList
 from app.utils.mail import mail
 from flask_mail import Message
-
 
 
 routes = Blueprint('controllers',
@@ -34,7 +35,8 @@ def main():
         devicesList = getDevicesList(Device)
         return render_template('userHome.html', devices = devicesList,
                                role=session.get('role'),
-                               user=session.get('user')
+                               user=session.get('user'),
+                               username=session.get('userName')
                                )
 
     return render_template('signin.html')
@@ -53,10 +55,11 @@ def userHome():
         return render_template('userHome.html',
                                devices = devicesList,
                                role=session.get('role'),
-                               user=session.get('user')
+                               user=session.get('user'),
+                               username=session.get('userName')
                                )
     else:
-        return render_template('error.html', error = 'Unauthorized Access')
+        return render_template('error.html', error='Unauthorized Access')
 
 @routes.route('/deleteDevice', methods=['POST'])
 def deleteDevice():
@@ -67,9 +70,9 @@ def deleteDevice():
     """
     res = ""
     try:
-        mac = request.values.get('mac_address', None)
-        device = filterSpecificObject(Device, macAddress=mac)
-        setDeviceIsDeleted(device)
+        device = filterSpecificObject(Device,
+                                      macAddress=request.values.get('mac_address', None))
+        setObjectIsDeleted(device)
         res = {'message': 'Device deleted successfully'}
     except Exception as e:
         print e
@@ -79,7 +82,9 @@ def deleteDevice():
 
 @routes.route('/showSignUp')
 def showSignUp():
-    return render_template('signup.html', user=session.get('user'))
+    return render_template('signup.html', users=getUsersList(User),
+                           role=session.get('role'),
+                           user=session.get('user'))
 
 @routes.route('/showSignin')
 def showSignin():
@@ -188,7 +193,7 @@ def validateLogin():
         username = request.form['inputEmail']
         password = request.form['inputPassword']
         # cursor.callproc('loginValidate',(username,))
-        user = filterSpecificObject(User, username=username)
+        user = filterSpecificObject(User, username=username, isDeleted=0)
 
         if user:
             if check_password_hash(str(user.password), password):
@@ -207,10 +212,14 @@ def validateLogin():
 def lockDevice():
     try:
         res = {'error': 'Failed to lock device'}
-        device = filterSpecificObject(Device, macAddress=request.values.get('mac_address', None))
+        device = filterSpecificObject(Device,
+                                      macAddress=request.values.get('mac_address',None))
         if device:
             device.owner = session.get('userName')
             commitChanges()
+            user = filterSpecificObject(User, username=session.get('userName'))
+            print datetime.now()
+            addObject(History(datetime.now(), user.username, "Lock device"))
             res = {'message':'Device locked'}
     except Exception as e:
         print e
@@ -222,7 +231,8 @@ def lockDevice():
 def unlockDevice():
     try:
         res = {'error': 'Failed to unlock device'}
-        device = filterSpecificObject(Device, macAddress=request.values.get('mac_address', None))
+        device = filterSpecificObject(Device,
+                                      macAddress=request.values.get('mac_address', None))
         if device:
             device.owner = ''
             commitChanges()
@@ -275,7 +285,36 @@ def updatePassword():
     user.password = hashed_password
     commitChanges()
     return jsonify({'message':'Password updated','title':'Update'})
-@routes.route('/getUsersList', methods=['GET', 'POST'])
-def getUsersList():
+
+@routes.route('/getUserNamesList', methods=['GET', 'POST'])
+def getUsersNameList():
     res = selectObject(User, User.username)
     return jsonify(res)
+
+@routes.route('/updateUser', methods=['POST'])
+def updateUser():
+    user = filterSpecificObject(User,
+                                username=request.values.get('username', None))
+    if user:
+        user.role = request.values.get('role', 'guest')
+        commitChanges()
+        return jsonify({'message':'User role updated'})
+    return jsonify({'error':'Failed to update user role'})
+
+@routes.route('/deleteUser', methods=['POST'])
+def deleteUser():
+    user = filterSpecificObject(User,
+                                username=request.values.get('username', None))
+    if user:
+        setObjectIsDeleted(user)
+        return jsonify({'message':'User deleted',
+                        'title':'Deleted'})
+    return jsonify({'error':'Failed to delete user'})
+
+@routes.route('/showHistory')
+def showHistory():
+    return render_template('history.html',
+                           role=session.get('role'),
+                           user=session.get('user'),
+                           username=session.get('userName')
+                           )

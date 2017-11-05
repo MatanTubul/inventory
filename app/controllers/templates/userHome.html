@@ -20,14 +20,14 @@
 
 <div class="container">
     <div class="header">
-
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">Phones</a></li>
             <li><a href="#">Wint</a></li>
             <li><a href="#">Licenses</a></li>
             {% if role == 'admin' %}
-            <li><a href="showSignUp">Create User</a></li>
+            <li><a href="showSignUp">Users</a></li>
             {% endif %}
+            <li><a href="showHistory">History</a></li>
             <div>
                 <ul class="nav nav-pills pull-right">
                     <li role="presentation" class="active">
@@ -85,7 +85,7 @@
                                     <em class="fa fa-lock"></em>
                                 </a>
                                 {% endif %}
-                                {% if value["owner"] %}
+                                {% if value["owner"] == username %}
                                 <a class="btn  btn-unlock-clicked" title="Unlock device" >
                                     <em class="fa fa fa-unlock"></em>
                                 </a>
