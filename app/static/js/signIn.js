@@ -47,7 +47,8 @@ $(document).ready(function() {
                         $('#modalResponse').modal('show');
                     } else{
                         console.log(res.url);
-                        window.location.replace(res.url);
+                        // window.location.replace(res.url);
+                        window.location.href = res.url;
                     }
                 },
                 error: function (error) {

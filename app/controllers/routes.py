@@ -201,7 +201,7 @@ def validateLogin():
                 session['user'] = user.name
                 session['userName'] = user.username
                 session['role'] = user.role
-                return json.dumps({'url':'http://localhost:5000/userHome'})
+                return json.dumps({'url':'/userHome'})
             else:
                 return json.dumps({'error':'Wrong Email address or Password.'})
         else:
