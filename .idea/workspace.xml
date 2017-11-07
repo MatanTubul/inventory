@@ -14,7 +14,6 @@
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/migrations/versions/b51d83a8eaa7_add_action_type.py" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/migrations/versions/bce82dd18490_.py" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/migrations/versions/e154dcaec472_add_history_table.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -497,7 +496,7 @@
       <workItem from="1508913742526" duration="35516000" />
       <workItem from="1509016687415" duration="735000" />
       <workItem from="1509890109272" duration="1739000" />
-      <workItem from="1509955457963" duration="8311000" />
+      <workItem from="1509955457963" duration="8426000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1508756814079</created>
@@ -548,11 +547,18 @@
       <option name="project" value="LOCAL" />
       <updated>1510044460639</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="untracking idea file">
+      <created>1510044641024</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1510044641024</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="109259000" />
+    <option name="totallyTimeSpent" value="109374000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
