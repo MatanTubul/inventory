@@ -14,4 +14,6 @@ if __name__ == '__main__':
     args = argsPars()
     app.run(debug=True,
             host=args.host,
-            port=args.port)
+            port=args.port,
+            threaded=True,
+            ssl_context=('dex.crt', 'dex.key'))
