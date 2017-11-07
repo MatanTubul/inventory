@@ -15,7 +15,8 @@ from app.database.utils import dbSetup, \
     commitChanges, \
     addObject, \
     selectObject, \
-    getUsersList
+    getUsersList, \
+    getEventsHistory
 from app.utils.mail import mail
 from flask_mail import Message
 
@@ -217,9 +218,10 @@ def lockDevice():
         if device:
             device.owner = session.get('userName')
             commitChanges()
-            user = filterSpecificObject(User, username=session.get('userName'))
-            print datetime.now()
-            addObject(History(datetime.now(), user.username, "Lock device"))
+            user = filterSpecificObject(User,
+                                        username=session.get('userName'))
+            addObject(History(datetime.now(),
+                              user.username, "Locked " + device.name + "(" + device.macAddress + ")"))
             res = {'message':'Device locked'}
     except Exception as e:
         print e
@@ -236,6 +238,10 @@ def unlockDevice():
         if device:
             device.owner = ''
             commitChanges()
+            user = filterSpecificObject(User,
+                                        username=session.get('userName'))
+            addObject(History(datetime.now(),
+                              user.username, "Unlocked " + device.name + "(" + device.macAddress + ")"))
             res = {'message':'Device unlocked', 'title':'Unlocked'}
     except Exception as e:
         print e
@@ -318,3 +324,18 @@ def showHistory():
                            user=session.get('user'),
                            username=session.get('userName')
                            )
+@routes.route('/getHistoryEvents', methods=['POST'])
+def getUserActionsHistory():
+    startEventDate = datetime.strptime(request.values.get('date', None), '%Y-%m-%d')
+    endEventDate = startEventDate.replace(minute=59, hour=23, second=59)
+    if startEventDate:
+        results = getEventsHistory(History, startEventDate, endEventDate)
+        event = {}
+        events = []
+        for e in results:
+            event["startTime"] = datetime.strftime(e.executed_on, '%H:%M')
+            event["text"] = str(e.user_id).split("@")[0]+" "+e.action
+            events.append(event.copy())
+        return jsonify({'events':events})
+    return jsonify({'error':'Failed to get events'})
+

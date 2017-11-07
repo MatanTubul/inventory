@@ -1,4 +1,5 @@
 from app import db
+from sqlalchemy import and_
 
 
 def dbSetup():
@@ -15,6 +16,12 @@ def filterSpecificObject(object, **kwargs):
     for key, value in kwargs.iteritems():
         query = query.filter(getattr(object, key) == value)
     return query.first()
+
+def getEventsHistory(history, startTime, endTime):
+    return db.session.query(history).filter(
+        and_(history.executed_on >= startTime,
+             history.executed_on <= endTime)).all()
+
 
 def setObjectIsDeleted(object):
     object.isDeleted = 1

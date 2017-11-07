@@ -307,7 +307,7 @@ $(document).ready(function(){
 
         content = "";
         for (var i = 0; i < data.length; i++) {
-            content += '<li id="' + this.id + '-list-item-' + i + '"><div><span class="' + this.id + ' time" id="' + this.id + '-list-item-' + i + '-time">' + data[i].startTime + ' - ' + data[i].endTime + '</span><span class="' + this.id + ' m" id="' + this.id + '-list-item-' + i + '-m">' + data[i].mTime + '</span></div><p id="' + this.id + '-list-item-' + i + '-text">' + data[i].text + '</p></li>';
+            content += '<li id="' + this.id + '-list-item-' + i + '"><div><span class="' + this.id + ' time" id="' + this.id + '-list-item-' + i + '-time">' + data[i].startTime + '</span><span class="' + this.id + ' m" id="' + this.id + '-list-item-' + i + '-m"></span></div><p id="' + this.id + '-list-item-' + i + '-text">' + data[i].text + '</p></li>';
         }
 
         document.getElementById(this.id + "-list").innerHTML = content;
@@ -376,8 +376,9 @@ $(document).ready(function(){
     var calendar = new Calendar("calendarContainer", "medium", [ "Wednesday", 3 ], [ "#0080c8", "#006cc8", "#ffffff", "#ffffff" ]);
     var organizer = new Organizer("organizerContainer", calendar);
 
-    currentDay = calendar.date.getDate(); // used this in order to make anyday today depending on the current today
-
+    currentDay = calendar.date.getDate();
+    // used this in order to make anyday today depending on the current today
+    // console.log(currentDay);
     // my best way of organizing data, maybe that can be the outcome of joining multiple tables in the database and then parsing them in such a manner, easier for the person to push use a date and the events of it
     data = {
         years: [
@@ -505,31 +506,28 @@ $(document).ready(function(){
     };
 
     function showEvents() {
-        theYear = -1, theMonth = -1, theDay = -1;
-        for (i = 0; i < data.years.length; i++) {
-            if (calendar.date.getFullYear() == data.years[i].int) {
-                theYear = i;
-                break;
+        var fullDate = calendar.date.getFullYear()+'-'+(calendar.date.getMonth()+1)+'-'+calendar.date.getDate();
+        //TODO - parse response from the server
+        $.ajax({
+            url: '/getHistoryEvents',
+            data: {'date':fullDate},
+            type: 'POST',
+            success: function (response) {
+
+                if(response.hasOwnProperty('error')){
+                   console.log(response);
+                }else{
+                    console.log(response['events']);
+                    theEvents = response['events'];
+                    organizer.list(theEvents); // what's responsible for listing
+                }
+
+            },
+            error: function (error) {
+                console.log(error);
             }
-        }
-        if (theYear == -1) return;
-        for (i = 0; i < data.years[theYear].months.length; i++) {
-            if ((calendar.date.getMonth() + 1) == data.years[theYear].months[i].int) {
-                theMonth = i;
-                break;
-            }
-        }
-        if (theMonth == -1) return;
-        for (i = 0; i < data.years[theYear].months[theMonth].days.length; i++) {
-            if (calendar.date.getDate() == data.years[theYear].months[theMonth].days[i].int) {
-                theDay = i;
-                break;
-            }
-        }
-        if (theDay == -1) return;
-        theEvents = data.years[theYear].months[theMonth].days[theDay].events;
-        organizer.list(theEvents); // what's responsible for listing
-    }
+        });
+    };
 
     showEvents();
 
