@@ -19,8 +19,8 @@ from app.database.utils import dbSetup, \
     getEventsHistory
 from app.utils.mail import mail
 from flask_mail import Message
-
-
+import logging
+logger = logging.getLogger(app.config['LOG_FILE'])
 routes = Blueprint('controllers',
                    __name__,
                    template_folder='templates')
@@ -76,7 +76,7 @@ def deleteDevice():
         setObjectIsDeleted(device)
         res = {'message': 'Device deleted successfully'}
     except Exception as e:
-        print e
+        logger.warning(e)
         res = {'error': 'Delete device failed'}
     finally:
         return jsonify(res)
@@ -124,7 +124,7 @@ def updateDevice():
         commitChanges()
         res = {'message':'Device updated successfully'}
     except Exception as e:
-        print e
+        logger.warning(e)
         res = {'error': 'Failed to update device'}
     finally:
         return jsonify(res)
@@ -152,10 +152,10 @@ def createDevice():
             addObject(device)
             res = {'message':'Device created successfully'}
     except Exception as e:
-        print e
+        logger.warning(e)
         res = {'error':'Failed to create device'}
     finally:
-        print res
+        logger.info(e)
         return jsonify(res)
 
 @routes.route('/signUp', methods=['POST'])
@@ -182,7 +182,7 @@ def signUp():
             addObject(u)
             res = {'message': 'User created successfully !'}
     except Exception as e:
-        print e
+        logger.warning(e)
         res = {'error': "Failed to create user"}
     finally:
         return json.dumps(res)
@@ -210,6 +210,7 @@ def validateLogin():
         else:
             return json.dumps({'error':'Wrong Email address or Password.'})
     except Exception as e:
+        logger.warning(e)
         return jsonify({'error':'validateLogin failed'})
 
 @routes.route('/lockDevice', methods=['POST'])
@@ -227,7 +228,7 @@ def lockDevice():
                               user.username, "Locked " + device.name + "(" + device.macAddress + ")"))
             res = {'message':'Device locked'}
     except Exception as e:
-        print e
+        logger.warning(e)
         return jsonify(res)
     finally:
         return jsonify(res)
@@ -247,7 +248,7 @@ def unlockDevice():
                               user.username, "Unlocked " + device.name + "(" + device.macAddress + ")"))
             res = {'message':'Device unlocked', 'title':'Unlocked'}
     except Exception as e:
-        print e
+        logger.warning(e)
     finally:
         return jsonify(res)
 
@@ -274,7 +275,7 @@ in case it is not you, ignore this mail.""" % (user.name,request.base_url,token)
         else:
             res = {'error':'Account is not exist'}
     except Exception as e:
-        print e
+        logger.warning(e)
     finally:
         return jsonify(res)
 
