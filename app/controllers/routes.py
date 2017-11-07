@@ -83,9 +83,12 @@ def deleteDevice():
 
 @routes.route('/showSignUp')
 def showSignUp():
-    return render_template('signup.html', users=getUsersList(User),
-                           role=session.get('role'),
-                           user=session.get('user'))
+    if session.get('user'):
+        return render_template('signup.html', users=getUsersList(User),
+                               role=session.get('role'),
+                               user=session.get('user'))
+    else:
+        return render_template('error.html', error='Unauthorized Access')
 
 @routes.route('/showSignin')
 def showSignin():
@@ -319,11 +322,15 @@ def deleteUser():
 
 @routes.route('/showHistory')
 def showHistory():
-    return render_template('history.html',
-                           role=session.get('role'),
-                           user=session.get('user'),
-                           username=session.get('userName')
-                           )
+    if session.get('user'):
+        return render_template('history.html',
+                               role=session.get('role'),
+                               user=session.get('user'),
+                               username=session.get('userName')
+                               )
+    else:
+        return render_template('error.html', error='Unauthorized Access')
+
 @routes.route('/getHistoryEvents', methods=['POST'])
 def getUserActionsHistory():
     startEventDate = datetime.strptime(request.values.get('date', None), '%Y-%m-%d')
