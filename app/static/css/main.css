@@ -62,7 +62,19 @@ used to vertically center elements, may need modification if you're not using de
     margin-left: -15px;
     margin-right: -15px;
 }
+.table-body {
+    max-height: 450px;
+    width: 100%;
+    margin: 0;
+    overflow-y: auto;
+}
 
+.table-head {
+
+}
+.table-head-row {
+
+}
 body {
     padding-top: 20px;
     padding-bottom: 20px;

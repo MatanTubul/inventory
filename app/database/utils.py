@@ -1,5 +1,7 @@
 from app import db
 from sqlalchemy import and_
+from sqlalchemy.orm import load_only
+
 
 
 def dbSetup():
@@ -34,8 +36,11 @@ def addObject(object):
     db.session.add(object)
     commitChanges()
 
-def selectObject(object, *kwargs):
-    return db.session.query(object).with_entities(*kwargs).all()
+def selectObject(object, *kwargs, **cond):
+    query = db.session.query(object)
+    for key, value in cond.iteritems():
+        query = query.filter(getattr(object, key) == value)
+    return [u.__dict__ for u in query.options(load_only(*kwargs)).all()]
 
 def updateObject(object, updateDict):
     db.session.query(object).update(updateDict)

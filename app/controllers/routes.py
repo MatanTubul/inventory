@@ -298,8 +298,12 @@ def updatePassword():
 
 @routes.route('/getUserNamesList', methods=['GET', 'POST'])
 def getUsersNameList():
-    res = selectObject(User, User.username)
-    return jsonify(res)
+    res = selectObject(User, User.username, isDeleted=0)
+    users = {'users':[]}
+    for user in res:
+        users['users'].append(user['username'])
+    print users
+    return jsonify(users)
 
 @routes.route('/updateUser', methods=['POST'])
 def updateUser():

@@ -51,47 +51,49 @@
               </div>
             </div>
             <div class="panel-body">
-              <table class="table table-hover table-bordered table-list" id="usersTable">
-                <thead>
-                <tr>
-                  <th><em class="fa fa-cog"></em></th>
-                  <th class="hidden-xs">#</th>
-                  <th>Name</th>
-                  <th>Username</th>
-                  <th>Role</th>
-                </tr>
-                <tr class="warning no-result">
-                  <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
-                </tr>
-                </thead>
-                <tbody>
+              <div class="table-body">
+                <table class="table table-hover table-bordered table-list" id="usersTable">
+                  <thead>
+                  <tr>
+                    <th><em class="fa fa-cog"></em></th>
+                    <th class="hidden-xs">#</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                  </tr>
+                  <tr class="warning no-result">
+                    <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
+                  </tr>
+                  </thead>
+                  <tbody>
 
-                {% for value in users %}
-                <tr >
-                  <td  align="center"  >
-                    {% if role == 'admin' and  not value["owner"]  %}
-                    <a class="btn btn-default btn-default-clicked" title="Edit user role"  >
-                      <em class="fa fa-pencil"></em>
-                    </a>
-                    <a class="btn btn-danger btn-danger-clicked" title="Delete user" >
-                      <em class="fa fa-trash"></em>
-                    </a>
-                    {% endif %}
+                  {% for value in users %}
+                  <tr >
+                    <td  align="center"  >
+                      {% if role == 'admin' and  not value["owner"]  %}
+                      <a class="btn btn-default btn-default-clicked" title="Edit user role"  >
+                        <em class="fa fa-pencil"></em>
+                      </a>
+                      <a class="btn btn-danger btn-danger-clicked" title="Delete user" >
+                        <em class="fa fa-trash"></em>
+                      </a>
+                      {% endif %}
 
-                  </td>
+                    </td>
 
-                  <td class="hidden-xs">{{loop.index}}</td>
-                  <td class="UserFullName">{{value["name"]}}</td>
-                  <td class="userName">{{value["username"]}}</td>
-                  <td class="role">{{value["role"]}}</td>
-                </tr>
-                {% else %}
-                <tr class="warning">
-                  <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-              </table>
+                    <td class="hidden-xs">{{loop.index}}</td>
+                    <td class="UserFullName">{{value["name"]}}</td>
+                    <td class="userName">{{value["username"]}}</td>
+                    <td class="role">{{value["role"]}}</td>
+                  </tr>
+                  {% else %}
+                  <tr class="warning">
+                    <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
           </div>
@@ -130,10 +132,10 @@
             </form>
           </div>
         </div>
-        </div>
       </div>
     </div>
   </div>
+</div>
 <!-- /create user modal -->
 
 <!-- Modal Response-->
@@ -167,12 +169,12 @@
         </button>
       </div>
       <div class="modal-body">
-          <div class="form-group">
-            <select type="text" name="userRole" id="userRole" class="form-control">
-              <option value="admin">Admin</option>
-              <option value="guest">Guest</option>
-            </select>
-          </div>
+        <div class="form-group">
+          <select type="text" name="userRole" id="userRole" class="form-control">
+            <option value="admin">Admin</option>
+            <option value="guest">Guest</option>
+          </select>
+        </div>
         </form>
       </div>
       <div class="modal-footer">
@@ -210,7 +212,7 @@
 </div>
 <!-- /.modal -->
 <footer class="footer">
-<p> <h3><img src="../static/images/wintego.png"></h3></p>
+  <p> <h3><img src="../static/images/wintego.png"></h3></p>
 </footer>
 </body>
 </html>

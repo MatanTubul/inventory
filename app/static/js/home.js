@@ -265,7 +265,7 @@ $(document).ready(function(){
                 } else {
                     // window.location.reload();
                     console.log(response);
-                    $.each( response, function( index, value ){
+                    $.each( response['users'], function( index, value ){
                         $('#inputOwner').append($('<option/>', {
                             value: value,
                             text : value

@@ -57,66 +57,68 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-hover table-bordered table-list" id="deviceTable">
-                        <thead>
-                        <tr>
-                            <th><em class="fa fa-cog"></em></th>
-                            <th class="hidden-xs">#</th>
-                            <th>Device Name</th>
-                            <th>Account</th>
-                            <th>Mac Address</th>
-                            <th>Phone Number</th>
-                            <th>Owner</th>
-                            <th>OS</th>
-                            <th>Version</th>
-                        </tr>
-                        <tr class="warning no-result">
-                            <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
-                        </tr>
-                        </thead>
-                        <tbody>
+                    <div class="table-body">
+                        <table class="table table-hover table-bordered table-list" id="deviceTable">
+                            <thead class="table-head">
+                            <tr class="table-head-row">
+                                <th><em class="fa fa-cog"></em></th>
+                                <th class="hidden-xs">#</th>
+                                <th>Device Name</th>
+                                <th>Account</th>
+                                <th>Mac Address</th>
+                                <th>Phone Number</th>
+                                <th>Owner</th>
+                                <th>OS</th>
+                                <th>Version</th>
+                            </tr>
+                            <tr class="warning no-result">
+                                <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
+                            </tr>
+                            </thead>
 
-                        {% for value in devices %}
-                        <tr >
+                            <tbody>
+                            {% for value in devices %}
+                            <tr >
 
-                            <td  align="center"  >
-                                {% if not value["owner"] %}
-                                <a class="btn  btn-lock-clicked" title="Lock device" >
-                                    <em class="fa fa-lock"></em>
-                                </a>
-                                {% endif %}
-                                {% if value["owner"] == username %}
-                                <a class="btn  btn-unlock-clicked" title="Unlock device" >
-                                    <em class="fa fa fa-unlock"></em>
-                                </a>
-                                {% endif %}
-                                {% if role == 'admin' and  not value["owner"]  %}
-                                <a class="btn btn-default btn-default-clicked" title="Edit device"  >
-                                    <em class="fa fa-pencil"></em>
-                                </a>
-                                <a class="btn btn-danger btn-danger-clicked" title="Delete device" >
-                                    <em class="fa fa-trash"></em>
-                                </a>
-                                {% endif %}
+                                <td  align="center"  >
+                                    {% if not value["owner"] %}
+                                    <a class="btn  btn-lock-clicked" title="Lock device" >
+                                        <em class="fa fa-lock"></em>
+                                    </a>
+                                    {% endif %}
+                                    {% if value["owner"] == username %}
+                                    <a class="btn  btn-unlock-clicked" title="Unlock device" >
+                                        <em class="fa fa fa-unlock"></em>
+                                    </a>
+                                    {% endif %}
+                                    {% if role == 'admin' and  not value["owner"]  %}
+                                    <a class="btn btn-default btn-default-clicked" title="Edit device"  >
+                                        <em class="fa fa-pencil"></em>
+                                    </a>
+                                    <a class="btn btn-danger btn-danger-clicked" title="Delete device" >
+                                        <em class="fa fa-trash"></em>
+                                    </a>
+                                    {% endif %}
 
-                            </td>
+                                </td>
 
-                            <td class="hidden-xs">{{loop.index}}</td>
-                            <td class="deviceName">{{value["name"]}}</td>
-                            <td class="account">{{value["account"]}}</td>
-                            <td class="macAddress">{{value["macAddress"]}}</td>
-                            <td class="phoneNumber">{{value["phoneNumber"]}}</td>
-                            <td class="owner">{{value["owner"]}}</td>
-                            <td class="os">{{value["os"]}}</td>
-                            <td class="osVersion">{{value["osVersion"]}}</td>
-                        </tr>
-                        {% else %}
-                        <tr class="warning">
-                            <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                                <td class="hidden-xs">{{loop.index}}</td>
+                                <td class="deviceName">{{value["name"]}}</td>
+                                <td class="account">{{value["account"]}}</td>
+                                <td class="macAddress">{{value["macAddress"]}}</td>
+                                <td class="phoneNumber">{{value["phoneNumber"]}}</td>
+                                <td class="owner">{{value["owner"]}}</td>
+                                <td class="os">{{value["os"]}}</td>
+                                <td class="osVersion">{{value["osVersion"]}}</td>
+                            </tr>
+                            {% else %}
+                            <tr class="warning">
+                                <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
             </div>
