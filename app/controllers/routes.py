@@ -155,7 +155,6 @@ def createDevice():
         logger.warning(e)
         res = {'error':'Failed to create device'}
     finally:
-        logger.info(e)
         return jsonify(res)
 
 @routes.route('/signUp', methods=['POST'])
