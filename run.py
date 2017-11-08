@@ -19,8 +19,9 @@ if __name__ == '__main__':
     log = logging.getLogger(app.config['LOG_FILE'])
     handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=10000000, backupCount=5)
     log.addHandler(handler)
-    #ssl_context=('dex.crt', 'dex.key')
+    ssl_context=('dex.crt', 'dex.key')
     app.run(debug=True,
             host=args.host,
             port=args.port,
-            threaded=True)
+            threaded=True,
+	    ssl_context=('wintventory.wintego.pem', 'wintventory.wintego.key.pem'))
