@@ -150,6 +150,9 @@ def createDevice():
                             request.form['inputOs'],
                             request.form['inputOsVersion'])
             addObject(device)
+            if(request.form['inputOwner']):
+                addObject(History(datetime.now(),
+                                  request.form['inputOwner'], "Locked " + device.name + "(" + device.macAddress + ")"))
             res = {'message':'Device created successfully'}
     except Exception as e:
         logger.warning(e)
