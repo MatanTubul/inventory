@@ -5,7 +5,12 @@
     background-color: #0080c8;
     color: #FFFFFF;
 }
-.btn-unlock-clicked{
+.btn-unlock-clicked {
     background-color: #0080c8;
     color: #FFFFFF;
+}
+
+.btn-unlock-unavailable {
+    background-color: #777;
+    color: white;
 }

@@ -222,13 +222,16 @@ def lockDevice():
         device = filterSpecificObject(Device,
                                       macAddress=request.values.get('mac_address',None))
         if device:
-            device.owner = session.get('userName')
-            commitChanges()
-            user = filterSpecificObject(User,
-                                        username=session.get('userName'))
-            addObject(History(datetime.now(),
-                              user.username, "Locked " + device.name + "(" + device.macAddress + ")"))
-            res = {'message':'Device locked'}
+            if not device.owner:
+                device.owner = session.get('userName')
+                commitChanges()
+                user = filterSpecificObject(User,
+                                            username=session.get('userName'))
+                addObject(History(datetime.now(),
+                                  user.username, "Locked " + device.name + "(" + device.macAddress + ")"))
+                res = {'message':'Device locked'}
+            else:
+                res = {'error':'Device already locked!!!'}
     except Exception as e:
         logger.warning(e)
         return jsonify(res)
