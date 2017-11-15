@@ -1,5 +1,4 @@
 from app import db
-from sqlalchemy.sql import func
 
 class History(db.Model):
     __tablename__ = 'history'

@@ -7,7 +7,7 @@ from flask import render_template, \
     json, jsonify
 from werkzeug import generate_password_hash, check_password_hash
 from app import app
-from app.models import User, Device, History
+from app.models import User, Device, History, IosContent
 from app.database.utils import dbSetup, \
     getDevicesList, \
     filterSpecificObject, \
@@ -307,7 +307,6 @@ def getUsersNameList():
     users = {'users':[]}
     for user in res:
         users['users'].append(user['username'])
-    print users
     return jsonify(users)
 
 @routes.route('/updateUser', methods=['POST'])
@@ -355,4 +354,41 @@ def getUserActionsHistory():
             events.append(event.copy())
         return jsonify({'events':events})
     return jsonify({'error':'Failed to get events'})
-
+@routes.route('/reports', methods=['POST','GET'])
+def showReports():
+    rep = IosContent("GoldApple","iphone","33:33:33:33","11.0","todo","todo",
+                     "warning","success","warning","success","success","failed","failed","failed",
+                     "todo","warning","todo", datetime.strftime(datetime.now(), '%Y-%m-%d'))
+    # addObject(rep)
+    r = rep.__dict__
+    del r['_sa_instance_state']
+    success = []
+    warning = []
+    failed = []
+    todo = []
+    meta = {}
+    for key, value in r.iteritems():
+        if value == 'warning':
+            warning.append(key)
+            continue
+        if value == 'success':
+            success.append(key)
+            continue
+        if value == 'failed':
+            failed.append(key)
+            continue
+        if value == 'todo':
+            todo.append(key)
+            continue
+        meta[key] = value
+    print warning
+    print success
+    print failed
+    print todo
+    print meta
+    return render_template('reports.html',
+                           meta=meta,
+                           success=success,
+                           warning=warning,
+                           failed=failed,
+                           todo=todo)

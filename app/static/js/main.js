@@ -27,8 +27,8 @@ $(document).ready(function(){
         if(jobCount == '0') {$('.no-result').show();}
         else {$('.no-result').hide();}
     });
-    // var timer = function() {
-    //     window.setTimeout(function(){ window.location.reload(); }, 60000);
-    // };
-    // timer();
+    var timer = function() {
+        window.setTimeout(function(){ window.location.reload(); }, 120000);
+    };
+    timer();
 });
