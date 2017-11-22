@@ -1,6 +1,7 @@
 $(document).ready(function() {
     var activeEl = 0;
     $(function() {
+        console.log("btn clicked");
         var items = $('.btn-nav');
         $( items[activeEl] ).addClass('active');
         $( ".btn-nav" ).click(function() {
@@ -33,7 +34,6 @@ $(document).ready(function() {
     });
 
     $('#addToSuccess').click(function () {
-        console.log("success");
         $('.selected').css('background', '#5cb85c');
         $('.selected').val("success");
         flushSelected()

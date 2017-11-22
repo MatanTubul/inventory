@@ -68,11 +68,13 @@
                 <button type="button" class="btn btn-default " id="addTodo">Todo</button>
             </div>
         </div>
+
         <div class="panel-body">
             <div class="tree well">
                 <ul>
                     <li>
                         <span><i class="fa fa-tablet"></i> {{report["name"]}}</span>
+
 
                         <ul>
                             {% for v in report["reports"] %}
@@ -86,19 +88,23 @@
                                         <span ><i class="fa fa-sitemap"></i> Attack flow </span>
 
                                         <ul >
-                                            {% for proc in v["attackProccess"].keys() %}
+                                            {% for key, value in v["attackProccess"].items() recursive %}
                                             <li >
-                                                <span ><i class="fa fa-minus-circle"></i> {{proc}} </span>
-
-                                                <ul id="ul-attack-items">
-                                                    <li>
-                                                        <span class="status" id="{{proc}}">{{v["attackProccess"][proc]["status"]}}</span>
-                                                    </li>
-                                                    <li>
+                                                {% if value is not mapping %}
+                                                    {% if key == 'status' %}
+                                                        <span class="status" id="{{key}}">{{value}}</span>
+                                                    {% else %}
                                                         <span class="fa fa-bug status"> issues</span>
-                                                    </li>
+                                                    {% endif %}
+                                                <!--<span ><i class="fa fa-minus-circle"></i> {{key}} </span>-->
+                                                {% endif %}
+                                                {% if value is mapping %}
+                                                <span ><i class="fa fa-minus-circle"></i> {{key}} </span>
+                                                <ul id="ul-attack-items">
+                                                    {{ loop(value.items())}}
                                                 </ul>
 
+                                            {% endif %}
                                             </li>
                                             {% endfor %}
                                         </ul>
@@ -114,17 +120,17 @@
                                                 {% if item == 'chats' %}
                                                 <ul>
                                                     {% for chat in v["data"][item] %}
-                                                     <li>
-                                                         <span ><i class="fa fa-comments"></i> {{chat}} </span>
-                                                         <ul id="ul-chat-items">
-                                                             <li>
-                                                                 <span class="status" id="{{chat}}" >{{v["data"][item][chat]["status"]}}</span>
-                                                             </li>
-                                                             <li>
-                                                                 <span class="fa fa-bug status"> issues</span>
-                                                             </li>
-                                                         </ul>
-                                                     </li>
+                                                    <li>
+                                                        <span ><i class="fa fa-comments"></i> {{chat}} </span>
+                                                        <ul id="ul-chat-items">
+                                                            <li>
+                                                                <span class="status" id="{{chat}}" >{{v["data"][item][chat]["status"]}}</span>
+                                                            </li>
+                                                            <li>
+                                                                <span class="fa fa-bug status"> issues</span>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
                                                     {% endfor %}
                                                 </ul>
                                                 {% else %}

@@ -389,6 +389,6 @@ def showDeviceReports(mac):
             collection.insert_one(schema)
         report = collection.find_one({"_id": mac})
         return render_template('reports.html', report=report)
-@routes.route('/myreports')
-def showReport():
-    return render_template('reports.html', report={})
+# @routes.route('/myreports')
+# def showReport():
+#     return render_template('reports.html', report={} , test={'lala':{'riki':{'prumit':{'hi':'text'}}}})
