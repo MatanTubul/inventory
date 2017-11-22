@@ -78,13 +78,6 @@ $(document).ready(function(){
         }
     });
 
-    // //validate editDevice form
-    // $('#editDeviceForm').click(function () {
-    //     if($('#editDeviceForm').valid()){
-    //
-    //     }
-    //
-    // });
     $('.report').click(function () {
         var $tr = $(this).closest('tr');
         var mac = $tr.children('td.macAddress').text();
