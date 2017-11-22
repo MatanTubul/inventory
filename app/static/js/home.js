@@ -78,14 +78,19 @@ $(document).ready(function(){
         }
     });
 
-    //validate editDevice form
-    $('#editDeviceForm').click(function () {
-        if($('#editDeviceForm').valid()){
-
-        }
-
+    // //validate editDevice form
+    // $('#editDeviceForm').click(function () {
+    //     if($('#editDeviceForm').valid()){
+    //
+    //     }
+    //
+    // });
+    $('.report').click(function () {
+        var $tr = $(this).closest('tr');
+        var mac = $tr.children('td.macAddress').text();
+        console.log(mac);
+        window.location.replace("/showDeviceReports/"+mac);
     });
-
     //Handling lock device
     $('body').on('click', '.btn-lock-clicked', function () {
         var $tr = $(this).closest('tr');
@@ -164,6 +169,7 @@ $(document).ready(function(){
         $('#editOwner').val($tr.children('td.owner').text());
         $('#editOs').val($tr.children('td.os').text());
         $('#editOs').attr('disabled','disabled');
+        $('#editMacAddress').attr('disabled','disabled');
         //loading os versions
         $osVersions.empty();
         var request = new XMLHttpRequest();
@@ -182,7 +188,6 @@ $(document).ready(function(){
 
     //Handling update device request
     $('#btnEditDevice').click(function () {
-
         $.ajax({
             url: '/updateDevice',
             data: $('#editDeviceForm').serialize(),
@@ -192,7 +197,7 @@ $(document).ready(function(){
                 if(response.hasOwnProperty('error')){
                     $('#modalOnResponseHeader').css('background', '#E2747E');
                     $('#modalResponseTitle').text("Failed");
-                    $('#modalResponseBody').text("Failed to create device with error, "+res.error);
+                    $('#modalResponseBody').text("Failed to create device with error, "+response.error);
                 }else{
                     $('#responseModalTitle').text("Device updated");
                     $('#modalResponseBody').text("Device updated successfully");
@@ -266,7 +271,7 @@ $(document).ready(function(){
                     $('#modalResponseBody').text("Failed to create device with error, " + res.error);
                 } else {
                     // window.location.reload();
-                    console.log(response);
+
                     $.each( response['users'], function( index, value ){
                         $('#inputOwner').append($('<option/>', {
                             value: value,

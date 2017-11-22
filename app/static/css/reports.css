@@ -176,7 +176,9 @@ body {
 
 .tags {
     margin-top: 30px;
-    margin-right: 10px;
+    margin-left: 870px;
+    position: fixed;
+    z-index: 5;
 }
 /*Business Card Css */
 .business-card {
@@ -186,14 +188,20 @@ body {
     border-radius: 4px;
     margin-top: 10px;
 }
-.profile-img {
-    height: 80px;
-    background: white;
+.media {
+    margin-left: 50px;
 }
-.job {
+.macAddress {
     color: #666666;
     font-size: 17px;
 }
 .mail {
     font-size: 16px;
+}
+
+.status {
+    color: white;
+}
+.btn-success:hover {
+    z-index: 1;
 }

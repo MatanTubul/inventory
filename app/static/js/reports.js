@@ -1,20 +1,16 @@
 $(document).ready(function() {
     var activeEl = 0;
-    var selectedLi = null;
     $(function() {
         var items = $('.btn-nav');
         $( items[activeEl] ).addClass('active');
         $( ".btn-nav" ).click(function() {
             $( items[activeEl] ).removeClass('active');
             $( this ).addClass('active');
-            console.log($(this).attr('id'));
             activeEl = $( ".btn-nav" ).index( this );
-            $.ajax({
-                url: '/getReportByAttack',
-                data: {'attack':$(this).attr('id')}
-            });
+            // loadReport($(this).attr('id'));
         });
     });
+
     $(function () {
         $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
         $('.tree li.parent_li > span').on('click', function (e) {
@@ -30,32 +26,54 @@ $(document).ready(function() {
         });
     });
 
-    $('body').on('click', 'li', function() {
-        // if (($(this).parent('ul').attr('class')) !=)
-        if (selectedLi == null) {
-            selectedLi = ($(this).parent('ul').attr('class'));
-            console.log(selectedLi);
-        }
+    $(".status").click(function (e) {
+        e.preventDefault();
         $(this).toggleClass('selected');
+
     });
 
     $('#addToSuccess').click(function () {
-        $('.success').append($('.'+selectedLi+' .selected').removeClass('selected'));
-        selectedLi = null
+        console.log("success");
+        $('.selected').css('background', '#5cb85c');
+        $('.selected').val("success");
+        flushSelected()
     });
 
     $('#addToFailed').click(function () {
-        $('.danger').append($('.'+selectedLi+' .selected').removeClass('selected'));
-        selectedLi = null
+        $('.selected').css('background', '#d9534f');
+        $('.selected').val("failed");
+        flushSelected()
     });
 
     $('#addToPartial').click(function () {
-        $('.warning').append($('.'+selectedLi+' .selected').removeClass('selected'));
-        selectedLi = null
+        $('.selected').css('background', '#f0ad4e');
+        $('.selected').val("partial");
+        flushSelected()
     });
 
     $('#addTodo').click(function () {
-        $('.todo').append($('.'+selectedLi+' .selected').removeClass('selected'));
-        selectedLi = null
+        $('.selected').css('background', '#777');
+        $('.selected').val("todo");
+        flushSelected()
     });
+    $('span').each(function() {
+        if ($.trim($(this).text()) == 'todo') {
+            $(this).css('background', '#777');
+        }
+        if ($.trim($(this).text()) == 'success') {
+            $(this).css('background', '#5cb85c');
+        }
+        if ($.trim($(this).text()) == 'failed') {
+            $(this).css('background', '#d9534f');
+        }
+        if ($.trim($(this).text()) == 'partial') {
+            $(this).css('background', '#f0ad4e');
+        }
+        if ($.trim($(this).text()) == 'issues') {
+            $(this).css('background', '#5bc0de');
+        }
+    });
+    function flushSelected() {
+        $('.selected').removeClass('selected')
+    };
 });

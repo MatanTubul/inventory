@@ -6,8 +6,8 @@ from flask import render_template, \
     session, \
     json, jsonify
 from werkzeug import generate_password_hash, check_password_hash
-from app import app
-from app.models import User, Device, History, IosContent
+from app import app, mongo
+from app.models import User, Device, History
 from app.database.utils import dbSetup, \
     getDevicesList, \
     filterSpecificObject, \
@@ -17,9 +17,11 @@ from app.database.utils import dbSetup, \
     selectObject, \
     getUsersList, \
     getEventsHistory
+from app.database.mongodb_utils import reports_dict
 from app.utils.mail import mail
 from flask_mail import Message
 import logging
+
 logger = logging.getLogger(app.config['LOG_FILE'])
 routes = Blueprint('controllers',
                    __name__,
@@ -49,7 +51,6 @@ def userHome():
      in case login failed user redirect to error page.
     :return: template
     """
-
     if session.get('user'):
         # cursor.callproc('get_devices_list')
         devicesList = getDevicesList(Device)
@@ -354,41 +355,40 @@ def getUserActionsHistory():
             events.append(event.copy())
         return jsonify({'events':events})
     return jsonify({'error':'Failed to get events'})
-@routes.route('/reports', methods=['POST','GET'])
-def showReports():
-    rep = IosContent("GoldApple","iphone","33:33:33:33","11.0","todo","todo",
-                     "warning","success","warning","success","success","failed","failed","failed",
-                     "todo","warning","todo", datetime.strftime(datetime.now(), '%Y-%m-%d'))
-    # addObject(rep)
-    r = rep.__dict__
-    del r['_sa_instance_state']
-    success = []
-    warning = []
-    failed = []
-    todo = []
-    meta = {}
-    for key, value in r.iteritems():
-        if value == 'warning':
-            warning.append(key)
-            continue
-        if value == 'success':
-            success.append(key)
-            continue
-        if value == 'failed':
-            failed.append(key)
-            continue
-        if value == 'todo':
-            todo.append(key)
-            continue
-        meta[key] = value
-    print warning
-    print success
-    print failed
-    print todo
-    print meta
-    return render_template('reports.html',
-                           meta=meta,
-                           success=success,
-                           warning=warning,
-                           failed=failed,
-                           todo=todo)
+
+@routes.route('/showDeviceReports/<mac>/')
+def showDeviceReports(mac):
+    device = filterSpecificObject(Device, macAddress=mac)
+    if device:
+        if device.os == 'Android':
+            attack = "gallery"
+        else:
+            attack = "gold_apple"
+        print attack
+
+        collection = mongo.db[attack]
+        report = collection.find_one({"_id": mac})
+        if report:
+            # report = collection.find_one({"_id": mac, "reports._id": device.osVersion})
+            # if report:
+            #     # update array object
+            #     collection.update_one({"_id": mac,"reports._id":device.osVersion},
+            #                  {'$set':{"reports.0":reports_dict[attack]}})
+            # else:
+            #     #add new element to report array
+            #     collection.update_one({"_id": mac},
+            #                        {'$push':{"reports":reports_dict[attack]}})
+            pass
+        else:
+            reports_dict[attack]["_id"] = device.osVersion
+            schema = {"_id": mac,
+                          "name":device.name,
+                          "account":device.account,
+                          "updated_on":str(datetime.strftime(datetime.now(), '%Y-%m-%d')),
+                          "reports": [reports_dict[attack]]}
+            collection.insert_one(schema)
+        report = collection.find_one({"_id": mac})
+        return render_template('reports.html', report=report)
+@routes.route('/myreports')
+def showReport():
+    return render_template('reports.html', report={})
