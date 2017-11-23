@@ -17,6 +17,7 @@
 <div class="container">
     <div class="row">
         <div class="btn-group btn-group-justified">
+            <meta id="selectedAttack" data-name="{{attack}}" data-other="{{attack}}">
             <div class="btn-group">
                 <button type="button" class="btn btn-nav" id="gold_apple">
                     <span ><img class="manImg" src="/static/images/attacks/gold_apple.png"></img></span>
@@ -94,7 +95,7 @@
                                                     {% if key == 'status' %}
                                                         <span class="status" id="{{key}}">{{value}}</span>
                                                     {% else %}
-                                                        <span class="fa fa-bug status"> issues</span>
+                                                        <span class="fa fa-bug issues" id="issues_{{key}}"> issues</span>
                                                     {% endif %}
                                                 <!--<span ><i class="fa fa-minus-circle"></i> {{key}} </span>-->
                                                 {% endif %}
@@ -127,7 +128,7 @@
                                                                 <span class="status" id="{{chat}}" >{{v["data"][item][chat]["status"]}}</span>
                                                             </li>
                                                             <li>
-                                                                <span class="fa fa-bug status"> issues</span>
+                                                                <span class="fa fa-bug issues"> issues</span>
                                                             </li>
                                                         </ul>
                                                     </li>

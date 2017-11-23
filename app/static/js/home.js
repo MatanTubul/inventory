@@ -82,7 +82,7 @@ $(document).ready(function(){
         var $tr = $(this).closest('tr');
         var mac = $tr.children('td.macAddress').text();
         console.log(mac);
-        window.location.replace("/showDeviceReports/"+mac);
+        window.open("/showDeviceReports/"+mac);
     });
     //Handling lock device
     $('body').on('click', '.btn-lock-clicked', function () {

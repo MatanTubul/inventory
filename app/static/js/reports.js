@@ -1,8 +1,14 @@
 $(document).ready(function() {
     var activeEl = 0;
+    var djangoData = $('#selectedAttack').data();
     $(function() {
-        console.log("btn clicked");
+        console.log(djangoData['name']);
         var items = $('.btn-nav');
+        activeEl = $.map(items, function(obj, index) {
+            if(obj.id == djangoData['name']) {
+                return index;
+            }
+        });
         $( items[activeEl] ).addClass('active');
         $( ".btn-nav" ).click(function() {
             $( items[activeEl] ).removeClass('active');
