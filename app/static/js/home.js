@@ -81,8 +81,11 @@ $(document).ready(function(){
     $('.report').click(function () {
         var $tr = $(this).closest('tr');
         var mac = $tr.children('td.macAddress').text();
-        console.log(mac);
-        window.open("/showDeviceReports/"+mac);
+        var attack = "gold_apple"
+        if ($tr.children('td.os').text() == "Android") {
+            attack = "gallery"
+        }
+        window.open("/loadDeviceReports/"+mac+"/"+attack);
     });
     //Handling lock device
     $('body').on('click', '.btn-lock-clicked', function () {

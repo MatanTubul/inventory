@@ -14,7 +14,10 @@ $(document).ready(function() {
             $( items[activeEl] ).removeClass('active');
             $( this ).addClass('active');
             activeEl = $( ".btn-nav" ).index( this );
-            // loadReport($(this).attr('id'));
+            djangoData = ($(this).attr('id'));
+            var mac = $('.macAddress').text();
+            console.log(mac);
+            window.location.replace("/loadDeviceReports/"+mac+"/"+djangoData);
         });
     });
 
@@ -36,32 +39,28 @@ $(document).ready(function() {
     $(".status").click(function (e) {
         e.preventDefault();
         $(this).toggleClass('selected');
-
     });
-
+    function setSelected(color, msg) {
+        $('.selected').css('background', color);
+        $('.selected').text(msg);
+        flushSelected();
+    }
     $('#addToSuccess').click(function () {
-        $('.selected').css('background', '#5cb85c');
-        $('.selected').val("success");
-        flushSelected()
+        setSelected('#5cb85c', "success");
     });
 
     $('#addToFailed').click(function () {
-        $('.selected').css('background', '#d9534f');
-        $('.selected').val("failed");
-        flushSelected()
+        setSelected('#d9534f', "failed");
     });
 
     $('#addToPartial').click(function () {
-        $('.selected').css('background', '#f0ad4e');
-        $('.selected').val("partial");
-        flushSelected()
+        setSelected('#f0ad4e', "partial");
     });
 
     $('#addTodo').click(function () {
-        $('.selected').css('background', '#777');
-        $('.selected').val("todo");
-        flushSelected()
+        setSelected('#777', "todo");
     });
+
     $('span').each(function() {
         if ($.trim($(this).text()) == 'todo') {
             $(this).css('background', '#777');
@@ -82,4 +81,81 @@ $(document).ready(function() {
     function flushSelected() {
         $('.selected').removeClass('selected')
     };
+
+    $(".issues").click(function (e) {
+        e.preventDefault();
+        // alert($(this).attr('id'));
+    });
+
+    /**
+     * building JSON report based on depth and key
+     * @param reportToJson JSON object holding the data
+     * @param mapkeyToDepth - Representing relationship between key and depth
+     * @param key - key of value
+     * @param value - data value
+     * @param reportDepth - depth of the item
+     */
+    function setReportValKey(reportToJson, mapkeyToDepth, key, value, reportDepth) {
+        switch(reportDepth) {
+            case 1:
+                reportToJson[key] = {};
+                mapkeyToDepth[reportDepth] = key;
+                if (value != null) {
+                    reportToJson[key] = value
+                }
+                break;
+            case 2:
+                reportToJson[mapkeyToDepth[1]][key] = {};
+                if (value != null) {
+                    reportToJson[mapkeyToDepth[1]][key] = value
+                }
+                mapkeyToDepth[reportDepth] = key;
+                break;
+            case 3:
+                reportToJson[mapkeyToDepth[1]][mapkeyToDepth[2]][key] = {};
+                if (value != null) {
+                    reportToJson[mapkeyToDepth[1]][mapkeyToDepth[2]][key] = value
+                }
+                mapkeyToDepth[reportDepth] = key;
+                break;
+            case 4:
+                reportToJson[mapkeyToDepth[1]][mapkeyToDepth[2]][mapkeyToDepth[3]][key] = {};
+                mapkeyToDepth[reportDepth] = key;
+                if (value != null) {
+                    reportToJson[mapkeyToDepth[1]][mapkeyToDepth[2]][mapkeyToDepth[3]][key] = value
+                }
+                break;
+            case 5:
+                reportToJson[mapkeyToDepth[1]][mapkeyToDepth[2]][mapkeyToDepth[3]][mapkeyToDepth[4]][key] = {};
+                if (value != null) {
+                    reportToJson[mapkeyToDepth[1]][mapkeyToDepth[2]][mapkeyToDepth[3]][mapkeyToDepth[4]][key] = value
+                }
+                mapkeyToDepth[reportDepth] = key;
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Parsing report tree into json object
+     */
+    $("#buttonList").click(function() {
+        var reportToJson = [];
+        var mapkeyToDepth = {};
+        $('ul.treeList').each(function(i, ul) {
+            $(ul).find("li").each(function(j,li){
+                // Now you can use $(ul) and $(li) to refer to the list and item
+                var value = $($(li).children("span")).text();
+                var key = ($($(li).children("span")).attr('id'));
+                var reportDepth = $($(li).children("span")).parents('li').length;
+                if ($(li).hasClass('parent_li') ) {
+                    setReportValKey(reportToJson, mapkeyToDepth, key, null,reportDepth)
+
+                } else {
+                    setReportValKey(reportToJson, mapkeyToDepth, key, value,reportDepth);
+                }
+            });
+        });
+    });
 });

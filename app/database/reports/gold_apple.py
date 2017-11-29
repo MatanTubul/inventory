@@ -1,161 +1,99 @@
+
+
 gold_apple_report = {
-    "_id": "",
-    "attackProccess": {
-        "gold_attack_process":
-            {
-                "status": "todo",
-                "issues": []
-            },
-        "ios_token":
-            {
-                "status": "todo",
-                "issues": []
-            },
-
-        "mail_credentials":
-            {
-                "status": "todo",
-                "issues": []
-            }
-        ,
-
-        "gmail_ghost":
-            {
-                "status": "todo",
-                "issues": []
-            }
-        ,
-
-        "yahoo_ghost":
-            {
-                "status": "todo",
-                "issues": []
-            }
-        ,
-
-        "captive":
-            {
-                "status": "todo",
-                "issues": []
-            }
-
+  "_id": "",
+  "updated_on": "",
+  "attackProccess": {
+    "gold_attack_process": {
+      "status": "todo"
     },
-    "data": {
-        "sms": {
-            "status": "todo",
-            "issues": []
-        },
-        "catchapp": {
-            "status": "todo",
-            "issues": []
-        },
-        "telegram": {
-            "status": "todo",
-            "issues": []
-        },
-        "bookmarks": {
-            "status": "todo",
-            "issues": []
-        },
-        "calendar": {
-
-            "status": "todo",
-            "issues": []
-        },
-        "call_history": {
-            "status": "todo",
-            "issues": []
-        },
-        "contacts": {
-            "status": "todo",
-            "issues": []
-        },
-        "files": {
-
-            "status": "todo",
-            "issues": []
-
-        },
-        "downloads": {
-
-            "status": "todo",
-            "issues": []
-
-        },
-        "notes": {
-
-            "status": "todo",
-            "issues": []
-
-        },
-        "posts": {
-
-            "status": "todo",
-            "issues": []
-
-        },
-        "app_list": {
-
-            "status": "todo",
-            "issues": []
-
-        },
-        "media": {
-
-            "status": "todo",
-            "issues": []
-
-        },
-        "locations": {
-
-            "status": "todo",
-            "issues": []
-
-        },
-        "chats": {
-            "whatsapp": {
-
-                "status": "todo",
-                "issues": []
-
-            },
-            "telegram": {
-
-                "status": "todo",
-                "issues": []
-
-            },
-            "skype": {
-
-                "status": "todo",
-                "issues": []
-
-            },
-            "line": {
-
-                "status": "todo",
-                "issues": []
-
-            },
-            "viber": {
-
-                "status": "todo",
-                "issues": []
-
-            },
-            "facebook": {
-                "status": "todo",
-                "issues": []
-            },
-            "twitter": {
-                "status": "todo",
-                "issues": []
-            },
-            "instagram": {
-                "status": "todo",
-                "issues": {}
-            }
-
-        }
+    "ios_token": {
+      "status": "todo"
+    },
+    "mail_credentials": {
+      "status": "todo"
+    },
+    "gmail_ghost": {
+      "status": "todo"
+    },
+    "yahoo_ghost": {
+      "status": "todo"
+    },
+    "captive": {
+      "status": "todo"
     }
+  },
+  "data": {
+    "sms": {
+      "status": "todo"
+    },
+    "catchapp": {
+      "status": "todo"
+    },
+    "telegram": {
+      "status": "todo"
+    },
+    "bookmarks": {
+      "status": "todo"
+    },
+    "calendar": {
+      "status": "todo"
+    },
+    "call_history": {
+      "status": "todo"
+    },
+    "contacts": {
+      "status": "todo"
+    },
+    "files": {
+      "status": "todo"
+    },
+    "downloads": {
+      "status": "todo"
+    },
+    "notes": {
+      "status": "todo"
+    },
+    "posts": {
+      "status": "todo"
+    },
+    "app_list": {
+      "status": "todo"
+    },
+    "media": {
+      "status": "todo"
+    },
+    "locations": {
+      "status": "todo"
+    },
+    "chats": {
+      "whatsapp": {
+        "status": "todo"
+      },
+      "telegram": {
+        "status": "todo"
+      },
+      "skype": {
+        "status": "todo"
+      },
+      "line": {
+        "status": "todo"
+      },
+      "viber": {
+        "status": "todo"
+      },
+      "facebook": {
+        "status": "todo"
+      },
+      "twitter": {
+        "status": "todo"
+      },
+      "instagram": {
+        "status": "todo"
+      }
+    }
+  },
+  "issues": {
+
+  }
 }

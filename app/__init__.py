@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_pymongo import PyMongo
 
+
 app = Flask(__name__)
 
 app.secret_key = 'r?4#/FUKr6u;Vh<s|d1:6-NPg^Rhy]'

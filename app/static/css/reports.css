@@ -183,16 +183,20 @@ body {
 /*Business Card Css */
 .business-card {
     border: 1px solid #cccccc;
-    background: #f8f8f8;
+    background: #0080c8;
     padding: 10px;
     border-radius: 4px;
     margin-top: 10px;
+    color: white;
 }
 .media {
     margin-left: 50px;
 }
+.media-left {
+    padding-right: 10px;
+    padding-top: 5px;
+}
 .macAddress {
-    color: #666666;
     font-size: 17px;
 }
 .mail {

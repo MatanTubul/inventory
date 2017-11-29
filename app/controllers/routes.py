@@ -17,10 +17,12 @@ from app.database.utils import dbSetup, \
     selectObject, \
     getUsersList, \
     getEventsHistory
-from app.database.mongodb_utils import reports_dict
+from app.database.mongodb_utils import buildReport, createCollection
 from app.utils.mail import mail
 from flask_mail import Message
 import logging
+from collections import OrderedDict
+
 
 logger = logging.getLogger(app.config['LOG_FILE'])
 routes = Blueprint('controllers',
@@ -356,15 +358,12 @@ def getUserActionsHistory():
         return jsonify({'events':events})
     return jsonify({'error':'Failed to get events'})
 
-@routes.route('/showDeviceReports/<mac>/')
-def showDeviceReports(mac):
+@routes.route('/loadDeviceReports/<mac>/<attack>')
+def loadDeviceReports(mac, attack):
     device = filterSpecificObject(Device, macAddress=mac)
+    os = device.os
     if device:
-        if device.os == 'Android':
-            attack = "gallery"
-        else:
-            attack = "gold_apple"
-        collection = mongo.db[attack]
+        collection = createCollection(mongo, attack)
         report = collection.find_one({"_id": mac})
         if report:
             # report = collection.find_one({"_id": mac, "reports._id": device.osVersion})
@@ -378,13 +377,16 @@ def showDeviceReports(mac):
             #                        {'$push':{"reports":reports_dict[attack]}})
             pass
         else:
-            reports_dict[attack]["_id"] = device.osVersion
+
             schema = {"_id": mac,
                           "name":device.name,
                           "account":device.account,
-                          "updated_on":str(datetime.strftime(datetime.now(), '%Y-%m-%d')),
-                          "reports": [reports_dict[attack]]}
+                          "reports": [buildReport(attack, device.osVersion)]}
             collection.insert_one(schema)
         report = collection.find_one({"_id": mac})
-        return render_template('reports.html', report=report, attack=attack)
+        return render_template('reports.html', report=report,
+                               attack=attack,
+                               osType=os,
+                               deviceName = device.name)
+
 
