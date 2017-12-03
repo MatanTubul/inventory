@@ -1,8 +1,9 @@
 $(document).ready(function() {
     var activeEl = 0;
     var djangoData = $('#selectedAttack').data();
+    $('.level2 ul').hide();
     $(function() {
-        console.log(djangoData['name']);
+        // console.log(djangoData['name']);
         var items = $('.btn-nav');
         activeEl = $.map(items, function(obj, index) {
             if(obj.id == djangoData['name']) {
@@ -21,17 +22,22 @@ $(document).ready(function() {
         });
     });
 
+
+
     $(function () {
         $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+
         $('.tree li.parent_li > span').on('click', function (e) {
             var children = $(this).parent('li.parent_li').find(' > ul > li');
+
             if (children.is(":visible")) {
                 children.hide('fast');
-                $(this).attr('title', 'Expand this branch').find(' > i').addClass('fa-plus-circle').removeClass('fa-minus-circle');
+                $(this).attr('title', 'Expand this branch').addClass('fa-plus-circle').removeClass('fa-minus-circle');
             } else {
                 children.show('fast');
-                $(this).attr('title', 'Collapse this branch').find(' > i').addClass('fa-minus-circle').removeClass('fa-plus-circle');
+                $(this).attr('title', 'Collapse this branch').addClass('fa-minus-circle').removeClass('fa-plus-circle');
             }
+            $('.level2 ul').show();
             e.stopPropagation();
         });
     });
@@ -75,9 +81,18 @@ $(document).ready(function() {
             $(this).css('background', '#f0ad4e');
         }
         if ($.trim($(this).text()) == 'issues') {
-            $(this).css('background', '#5bc0de');
+            $(this).css('background', '#d9534f');
+            $(this).css('color', '#fff');
         }
     });
+
+    $('.fab').hover(function () {
+        $(this).toggleClass('active');
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
     function flushSelected() {
         $('.selected').removeClass('selected')
     };
@@ -132,6 +147,13 @@ $(document).ready(function() {
                 }
                 mapkeyToDepth[reportDepth] = key;
                 break;
+            case 6:
+                reportToJson[mapkeyToDepth[1]][mapkeyToDepth[2]][mapkeyToDepth[3]][mapkeyToDepth[4]][mapkeyToDepth[5]][key] = {};
+                if (value != null) {
+                    reportToJson[mapkeyToDepth[1]][mapkeyToDepth[2]][mapkeyToDepth[3]][mapkeyToDepth[4]][mapkeyToDepth[5]][key] = value
+                }
+                mapkeyToDepth[reportDepth] = key;
+                break;
             default:
                 break;
         }
@@ -140,8 +162,12 @@ $(document).ready(function() {
     /**
      * Parsing report tree into json object
      */
-    $("#buttonList").click(function() {
-        var reportToJson = [];
+    $('#saveReport').click(function() {
+        $('#processing-modal').modal('show');
+        setTimeout(function(){
+            $('#processing-modal').modal('hide');
+        }, 10000);
+        var reportToJson = {};
         var mapkeyToDepth = {};
         $('ul.treeList').each(function(i, ul) {
             $(ul).find("li").each(function(j,li){
@@ -149,13 +175,44 @@ $(document).ready(function() {
                 var value = $($(li).children("span")).text();
                 var key = ($($(li).children("span")).attr('id'));
                 var reportDepth = $($(li).children("span")).parents('li').length;
+                // console.log(li);
                 if ($(li).hasClass('parent_li') ) {
                     setReportValKey(reportToJson, mapkeyToDepth, key, null,reportDepth)
 
                 } else {
+                    if (typeof key == "undefined") {
+                        var key = ($($(li).children("span")).attr('class'));
+
+                    }
+
                     setReportValKey(reportToJson, mapkeyToDepth, key, value,reportDepth);
                 }
             });
         });
+        console.log(reportToJson);
+        if (reportToJson) {
+            console.log(reportToJson);
+            $.ajax({
+                url:'/updateReportDocument',
+                data:JSON.stringify({'report':reportToJson,
+                    'mac':$('.macAddress').text(),
+                    'attack':djangoData['name']}),
+                dataType: 'json',
+                contentType: 'application/json',
+                type:'POST',
+                success: function(response){
+                    $('#processing-modal').modal('hide');
+                    if(response.hasOwnProperty('error')){
+                        console.log(response);
+                    }else{
+                        console.log(response);
+                    }
+                },
+                error: function(error){
+                    $('#processing-modal').modal('hide');
+                    console.log(error);
+                }
+            });
+        }
     });
 });

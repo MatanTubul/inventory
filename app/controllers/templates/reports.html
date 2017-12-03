@@ -63,15 +63,28 @@
                     <div class="macAddress">{{report["_id"]}}</div>
                     <div class="mail">{{report["account"]}}</a> </div>
                 </div>
+
             </div>
         </div>
-        <div class="">
-            <div class="btn-group tags">
-                <button type="button" class="btn btn-success " id="addToSuccess">Success</button>
-                <button type="button" class="btn btn-warning " id="addToPartial">Partially</button>
-                <button type="button" class="btn btn-danger " id="addToFailed">Failed</button>
-                <button type="button" class="btn btn-default " id="addTodo">Todo</button>
-                <button type="button" class="btn btn-default " id="buttonList">list</button>
+
+        <div id="inbox">
+            <div class="fab btn-group show-on-hover dropup">
+                <div data-toggle="tooltip" data-placement="left" title="Compose" style="margin-left: 42px;">
+                    <button type="button" class="btn btn-primary btn-io dropdown-toggle" data-toggle="dropdown">
+            <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x fab-backdrop"></i>
+                <i class="fa  fa-cog fa-stack-1x fa-inverse fab-primary"></i>
+                <i class="fa fa-pencil fa-stack-1x fa-inverse fab-secondary"></i>
+            </span>
+                    </button>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li id="saveReport" ><a data-toggle="tooltip" data-placement="left" title="Save"><i class="fa  fa-floppy-o"></i></a></li>
+                    <li><a  data-toggle="tooltip" data-placement="left" title="Success"><i class="fa fa-check-circle" id="addToSuccess"></i></a></li>
+                    <li><a  data-toggle="tooltip" data-placement="left" title="TODO"><i class="fa fa-list-alt" id="addTodo"></i></a></li>
+                    <li><a  data-toggle="tooltip" data-placement="left" title="Partial"><i class="fa fa-exclamation-triangle" id="addToPartial"></i></a></li>
+                    <li><a  data-toggle="tooltip" data-placement="left" title="Failed"><i class="fa fa-times-circle" id="addToFailed"></i></a></li>
+                </ul>
             </div>
         </div>
 
@@ -95,7 +108,7 @@
                                                 {% elif key == 'issues' %}
                                                     <span class="fa fa-bug issues" id="issues"> issues</span>
                                                 {% elif key == 'updated_on' %}
-                                                    <span id="updateOn" class="fa fa-calendar-o "> {{value}} </span>
+                                                    <span id="updateOn" class="fa fa-calend ar-o "> {{value}} </span>
                                                 {% endif %}
 
                                             {% endif %}
@@ -105,7 +118,7 @@
                                                 {% elif key == 'data' %}
                                                 <span id="data" class="fa fa-database">  data </span>
                                                 {% else %}
-                                                <span id="{{key}}" class="fa fa-minus-circle"> {{key}} </span>
+                                                <span id="{{key}}" class="fa fa-minus-circle" > {{key}} </span>
                                                 {% endif %}
                                                 <ul id="{{key}}">
                                                     {{ loop(value.items())}}
@@ -120,6 +133,21 @@
                         </ul>
                     </li>
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Static Modal -->
+<div class="modal modal-static fade" id="processing-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4>Saving Report</h4>
+                    <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+
+                </div>
             </div>
         </div>
     </div>

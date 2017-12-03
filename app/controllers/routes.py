@@ -21,7 +21,8 @@ from app.database.mongodb_utils import buildReport, createCollection
 from app.utils.mail import mail
 from flask_mail import Message
 import logging
-from collections import OrderedDict
+from app.utils import Utils
+
 
 
 logger = logging.getLogger(app.config['LOG_FILE'])
@@ -365,28 +366,56 @@ def loadDeviceReports(mac, attack):
     if device:
         collection = createCollection(mongo, attack)
         report = collection.find_one({"_id": mac})
-        if report:
-            # report = collection.find_one({"_id": mac, "reports._id": device.osVersion})
-            # if report:
-            #     # update array object
-            #     collection.update_one({"_id": mac,"reports._id":device.osVersion},
-            #                  {'$set':{"reports.0":reports_dict[attack]}})
-            # else:
-            #     #add new element to report array
-            #     collection.update_one({"_id": mac},
-            #                        {'$push':{"reports":reports_dict[attack]}})
-            pass
-        else:
-
+        if not report:
             schema = {"_id": mac,
                           "name":device.name,
                           "account":device.account,
-                          "reports": [buildReport(attack, device.osVersion)]}
+                          "reports": [buildReport(attack,
+                                                  device.osVersion,
+                                                  data=None,
+                                                  attackProccess=None)]}
             collection.insert_one(schema)
-        report = collection.find_one({"_id": mac})
+            report = collection.find_one({"_id": mac})
+
         return render_template('reports.html', report=report,
                                attack=attack,
                                osType=os,
                                deviceName = device.name)
+
+@routes.route('/updateReportDocument', methods=['POST','GET'])
+def updateReportDocument():
+    json_data = Utils.getRequestJSON()
+    attackProccess = None
+    report_data = json_data['report']
+    mac = json_data['mac']
+    attack = json_data['attack']
+    osVersion = report_data["deviceName"].keys()[0]
+    collection = createCollection(mongo, attack)
+    report = collection.find_one({"_id" : mac})
+    data = report_data["deviceName"][osVersion]["data"]
+    if 'attackProccess' in report_data["deviceName"][osVersion]:
+        attackProccess = report_data["deviceName"][osVersion]["attackProccess"]
+
+    if report :
+        report = collection.find_one({"_id": mac, "reports._id": osVersion})
+        if report:
+            print "update array object"
+            collection.update_one({"_id": mac,"reports._id":osVersion},
+                         {'$set':{"reports.0":buildReport(attack,
+                                                          osVersion,
+                                                          data=data,
+                                                          attackProccess=attackProccess,
+                                                          issues=report_data["deviceName"][osVersion]["issues"])}})
+        else:
+            print "add new element to report array"
+            collection.update_one({"_id": mac},
+                               {'$push':{"reports":buildReport(attack,
+                                                               osVersion,
+                                                               data=None,
+                                                               attackProccess=None,
+                                                               issues={})}})
+        return jsonify({'ok': "report updated"})
+
+    return {'error': "Failed to update report"}
 
 
