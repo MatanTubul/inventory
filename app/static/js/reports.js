@@ -101,6 +101,22 @@ $(document).ready(function() {
         e.preventDefault();
         // alert($(this).attr('id'));
     });
+    $(".add_issues").click(function () {
+        $('#modalIssue').modal('show');
+    });
+    $("#addIssues").click(function () {
+        $('#modalIssue').modal('hide');
+        var url = $('#issue_url').val();
+        var url_desc = $('#issue_desc').val();
+        var li = $('<li><span class="span_issue_url" title="'+url_desc+'"><a class="url_hyper_link" target="_blank" href="'+url+'">' +url+'</a></span></li>');
+        $('.issues_list').append(li);
+        // var span = li.find('span:first');
+        // span.attr({
+        //     href:url,
+        //     title:url_desc
+        // });
+
+    });
 
     /**
      * building JSON report based on depth and key

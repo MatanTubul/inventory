@@ -103,7 +103,7 @@ body {
     min-height:20px;
     padding:19px;
     margin-bottom:20px;
-    background-color:#fbfbfb;
+    background-color:wheat;
     border:1px solid #999;
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
@@ -349,4 +349,11 @@ body {
     margin: 0 !important;
 }
 .modal-static .modal-content .icon {
+}
+.span_issue_url {
+    background-color: #d9534f;
+    color: #fff;
+}
+.url_hyper_link {
+    color: #FFFFFF;
 }
