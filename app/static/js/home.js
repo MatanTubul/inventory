@@ -85,7 +85,8 @@ $(document).ready(function(){
         if ($tr.children('td.os').text() == "Android") {
             attack = "gallery"
         }
-        window.open("/loadDeviceReports/"+mac+"/"+attack);
+
+        window.open("/loadDeviceReports/"+mac+"/");
     });
     //Handling lock device
     $('body').on('click', '.btn-lock-clicked', function () {
@@ -184,24 +185,27 @@ $(document).ready(function(){
 
     //Handling update device request
     $('#btnEditDevice').click(function () {
+        var disabled = $('#editDeviceForm').find(':input:disabled').removeAttr('disabled');
         $.ajax({
             url: '/updateDevice',
             data: $('#editDeviceForm').serialize(),
             type: 'POST',
             success: function(response){
+                disabled.attr('disabled','disabled');
                 $('#editDevice').modal('hide');
                 if(response.hasOwnProperty('error')){
                     $('#modalOnResponseHeader').css('background', '#E2747E');
                     $('#modalResponseTitle').text("Failed");
-                    $('#modalResponseBody').text("Failed to create device with error, "+response.error);
+                    $('#modalResponseBody').text(response.error);
                 }else{
                     $('#responseModalTitle').text("Device updated");
                     $('#modalResponseBody').text("Device updated successfully");
-                    $('#modalResponse').modal('show');
                 }
+                $('#modalResponse').modal('show');
 
             },
             error: function(error){
+                disabled.attr('disabled','disabled');
                 // console.log(error);
             }
         });
