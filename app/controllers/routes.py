@@ -118,9 +118,13 @@ def updateDevice():
     """
     res = "Update device failed"
     try:
+        print request.form
         device = filterSpecificObject(Device, macAddress=request.form['inputMacAddress'])
+
         device.name = request.form['inputDeviceName']
+
         device.owner = request.form['inputOwner']
+
         device.phoneNumber = request.form['inputPhoneNumber']
         device.osVersion = request.form['inputOsVersion']
         device.account =  request.form['inputAccount']
@@ -366,6 +370,7 @@ def loadDeviceReports(mac, attack):
     if device:
         collection = createCollection(mongo, attack)
         report = collection.find_one({"_id": mac})
+        # Device does not exist in the report
         if not report:
             schema = {"_id": mac,
                           "name":device.name,
@@ -375,7 +380,16 @@ def loadDeviceReports(mac, attack):
                                                   data=None,
                                                   attackProccess=None)]}
             collection.insert_one(schema)
-            report = collection.find_one({"_id": mac})
+        #in case device exist in reports but version not
+        elif not collection.find_one({"_id": mac, "reports._id": device.osVersion}):
+            collection.update_one({"_id" : mac},
+                                  {'$push' : {"reports" : buildReport(attack,
+                                                                      device.osVersion,
+                                                                      data=None,
+                                                                      attackProccess=None,
+                                                                      issues={})}})
+
+        report = collection.find_one({"_id": mac})
 
         return render_template('reports.html', report=report,
                                attack=attack,
@@ -384,15 +398,21 @@ def loadDeviceReports(mac, attack):
 
 @routes.route('/updateReportDocument', methods=['POST','GET'])
 def updateReportDocument():
+
     json_data = Utils.getRequestJSON()
     attackProccess = None
     report_data = json_data['report']
     mac = json_data['mac']
     attack = json_data['attack']
+
+    #get report osVersion
     osVersion = report_data["deviceName"].keys()[0]
+    #get collection
     collection = createCollection(mongo, attack)
+
     report = collection.find_one({"_id" : mac})
     data = report_data["deviceName"][osVersion]["data"]
+    issues = report_data["deviceName"][osVersion]["issues"]
     if 'attackProccess' in report_data["deviceName"][osVersion]:
         attackProccess = report_data["deviceName"][osVersion]["attackProccess"]
 
@@ -405,7 +425,7 @@ def updateReportDocument():
                                                           osVersion,
                                                           data=data,
                                                           attackProccess=attackProccess,
-                                                          issues=report_data["deviceName"][osVersion]["issues"])}})
+                                                          issues=issues)}})
         else:
             print "add new element to report array"
             collection.update_one({"_id": mac},

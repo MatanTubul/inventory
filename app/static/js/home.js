@@ -86,7 +86,7 @@ $(document).ready(function(){
             attack = "gallery"
         }
 
-        window.open("/loadDeviceReports/"+mac+"/");
+        window.open("/loadDeviceReports/"+mac+"/"+attack);
     });
     //Handling lock device
     $('body').on('click', '.btn-lock-clicked', function () {

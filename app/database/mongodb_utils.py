@@ -31,12 +31,16 @@ def buildReport(attack, osVersion, data=None, attackProccess=None, issues={}):
     if attackProccess:
         d["attackProccess"] = attackProccess
     d["data"] = data
+    d["issues"] = {}
     if attackProccess:
         for k, v in attackProccess.items():
             d["attackProccess"][k] = v
     for k, v in data.items():
         d["data"][k] = v
-    d["issues"] = issues
+
+    for k, v in issues.items():
+        d["issues"][k] = v
+    print d["issues"]
     return d
 
 def createCollection(mongo,name):

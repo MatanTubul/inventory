@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var activeEl = 0;
     var djangoData = $('#selectedAttack').data();
-    $('.level2 ul').hide();
+    // $('.level2 ul').hide();
     $(function() {
         // console.log(djangoData['name']);
         var items = $('.btn-nav');
@@ -24,6 +24,8 @@ $(document).ready(function() {
 
 
 
+
+
     $(function () {
         $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
 
@@ -37,7 +39,7 @@ $(document).ready(function() {
                 children.show('fast');
                 $(this).attr('title', 'Collapse this branch').addClass('fa-minus-circle').removeClass('fa-plus-circle');
             }
-            $('.level2 ul').show();
+            // $('.level2 ul').show();
             e.stopPropagation();
         });
     });
@@ -108,15 +110,18 @@ $(document).ready(function() {
         $('#modalIssue').modal('hide');
         var url = $('#issue_url').val();
         var url_desc = $('#issue_desc').val();
-        var li = $('<li><span class="span_issue_url" title="'+url_desc+'"><a class="url_hyper_link" target="_blank" href="'+url+'">' +url+'</a></span></li>');
+        var li = $('<li></i> ' +
+            '<span class="span_issue_url " title="'+url_desc+'"> ' +
+            '<a class="url_hyper_link " target="_blank" href="'+url+'"> '+url+'</a>' +
+            '</span> <i class="fa fa-minus-square delete_issue"> ' +
+            '</li>');
         $('.issues_list').append(li);
-        // var span = li.find('span:first');
-        // span.attr({
-        //     href:url,
-        //     title:url_desc
-        // });
-
     });
+
+    $(document).on('click', "i.delete_issue",(function () {
+        console.log("delete li")
+        $(this).closest('li').remove();
+    }));
 
     /**
      * building JSON report based on depth and key
@@ -198,7 +203,17 @@ $(document).ready(function() {
                 } else {
                     if (typeof key == "undefined") {
                         var key = ($($(li).children("span")).attr('class'));
+                    }
+                    if ($($(li).children("span")).hasClass('span_issue_url')) {
+                        console.log(reportDepth)
+                        value = $($(li).children("span")).attr('title');
+                        key =   ($($(li).children("span")).find('a:first').attr('href')).split("https://")[1]
 
+                        console.log(key)
+                        console.log(value)
+                    }
+                    if ($($(li).children("span")).hasClass('add_issues')) {
+                        return true;
                     }
 
                     setReportValKey(reportToJson, mapkeyToDepth, key, value,reportDepth);
@@ -207,7 +222,6 @@ $(document).ready(function() {
         });
         console.log(reportToJson);
         if (reportToJson) {
-            console.log(reportToJson);
             $.ajax({
                 url:'/updateReportDocument',
                 data:JSON.stringify({'report':reportToJson,
@@ -221,7 +235,7 @@ $(document).ready(function() {
                     if(response.hasOwnProperty('error')){
                         console.log(response);
                     }else{
-                        console.log(response);
+                        location.reload();
                     }
                 },
                 error: function(error){

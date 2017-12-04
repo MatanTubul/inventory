@@ -93,9 +93,9 @@
                 <ul class="treeList">
                     <li class="level1">
                         <span id="deviceName" class="fa fa-tablet"> {{report["name"]}}</span>
-                        <ul class="level2">
+                        <ul >
                             {% for v in report["reports"] %}
-                            <li >
+                            <li class="level2">
                                 <span id="{{v['_id']}}" class="fa fa-code-fork"> {{v["_id"]}} </span>
                                 <ul class="level3">
 
@@ -107,6 +107,11 @@
                                                     <span class="status" > {{value}}</span>
                                                 {% elif key == 'updated_on' %}
                                                     <span id="updateOn" class="fa fa-calend ar-o "> {{value}} </span>
+                                                {% else %}
+                                                    <span  class="span_issue_url" title="{{value}}">
+                                                        <a class="url_hyper_link " target="_blank" href="https://{{key}}"> https://{{key}}</a>
+                                                    </span>
+                                                    <i class="fa fa-minus-square delete_issue"></i>
                                                 {% endif %}
 
                                             {% endif %}
@@ -120,7 +125,7 @@
                                                 <ul class="issues_list">
                                                     <li>
                                                         <span class="fa fa-plus add_issues"></span>
-                                                    </li>
+                                                    </li></ul>
 
                                                 {% else %}
                                                 <span id="{{key}}" class="fa fa-minus-circle" > {{key}} </span>
