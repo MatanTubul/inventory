@@ -73,6 +73,6 @@ $(document).ready(function(){
 
     $('#btnCloseResponseModal').click(function(){
         console.log("rediredt");
-        window.location.replace("http://localhost:5000/");
+        window.location.replace("/");
     });
 });

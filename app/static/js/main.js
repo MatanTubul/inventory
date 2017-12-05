@@ -28,7 +28,7 @@ $(document).ready(function(){
         else {$('.no-result').hide();}
     });
     var timer = function() {
-        window.setTimeout(function(){ window.location.reload(); }, 120000);
+        window.setTimeout(function(){ window.location.reload(); }, 300000);
     };
     timer();
 });
