@@ -115,6 +115,7 @@ $(document).ready(function() {
             '<a class="url_hyper_link " target="_blank" href="'+url+'"> '+url+'</a>' +
             '</span> <i class="fa fa-minus-square delete_issue"> ' +
             '</li>');
+        li.css('display','block');
         $('.issues_list').append(li);
     });
 
@@ -220,7 +221,7 @@ $(document).ready(function() {
                 }
             });
         });
-        console.log(reportToJson);
+
         if (reportToJson) {
             $.ajax({
                 url:'/updateReportDocument',
