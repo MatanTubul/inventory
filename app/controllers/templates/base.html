@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/static/css/main.css" rel="stylesheet">
+</head>
+<body>
+{% block processing_modal %}
+<!-- Static Modal -->
+<div class="modal modal-static fade" id="processing-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4 class="process-modal-title">Saving Report</h4>
+                    <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+</body>
+
+</html>

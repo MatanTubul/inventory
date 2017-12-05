@@ -32,6 +32,12 @@ $(document).ready(function(){
     });
 
     $('#resetPasswordBtn').click(function () {
+        $('.process-modal-title').text("Reset password");
+        $('#processing-modal').modal('show');
+        setTimeout(function(){
+            $('#processing-modal').modal('hide');
+        }, 10000);
+        $('#processing-modal').modal('show');
         if ($('#register-form').valid()){
             console.log($('#email').val());
             $.ajax({
@@ -39,6 +45,7 @@ $(document).ready(function(){
                 data: $('form').serialize(),
                 type: 'POST',
                 success: function (response) {
+                    $('#processing-modal').modal('hide');
                     if(response.hasOwnProperty('error')){
                         $('#modalOnResponseHeader').css('background', '#E2747E');
                         $('#modalResponseTitle').text("Failed");
@@ -51,6 +58,7 @@ $(document).ready(function(){
                     $('#modalResponse').modal('show');
                 },
                 error: function (error) {
+                    $('#processing-modal').modal('hide');
                     console.log(error);
                 }
             });
