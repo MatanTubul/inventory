@@ -64,7 +64,7 @@ def userHome():
                                username=session.get('userName')
                                )
     else:
-        return render_template('error.html', error='Unauthorized Access')
+        return render_template('signin.html')
 
 @routes.route('/deleteDevice', methods=['POST'])
 def deleteDevice():
