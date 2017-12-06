@@ -126,6 +126,7 @@ def updateDevice():
         device.owner = request.form['inputOwner']
 
         device.phoneNumber = request.form['inputPhoneNumber']
+        device.group = request.form['inputGroup']
         device.osVersion = request.form['inputOsVersion']
         device.account =  request.form['inputAccount']
         device.macAddress = request.form['inputMacAddress']
@@ -154,6 +155,7 @@ def createDevice():
                             request.form['inputAccount'],
                             request.form['inputMacAddress'],
                             request.form['inputPhoneNumber'],
+                            request.form['inputGroup'],
                             request.form['inputOwner'],
                             request.form['inputOs'],
                             request.form['inputOsVersion'])

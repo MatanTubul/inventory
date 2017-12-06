@@ -71,6 +71,7 @@
                                 <th>Owner</th>
                                 <th>OS</th>
                                 <th>Version</th>
+                                <th>Group</th>
                                 <th>Reports</th>
                             </tr>
                             <tr class="warning no-result">
@@ -116,6 +117,7 @@
                                 <td class="owner">{{value["owner"]}}</td>
                                 <td class="os">{{value["os"]}}</td>
                                 <td class="osVersion">{{value["osVersion"]}}</td>
+                                <td class="group">{{value["group"]}}</td>
                                 <td><a  class="report">Report</a></td>
                             </tr>
                             {% else %}
@@ -156,6 +158,9 @@
                     </div>
                     <div class="form-group">
                         <input type="text"  name="inputPhoneNumber" id="inputPhoneNumber"  class="form-control" placeholder="Phone Number"  />
+                    </div>
+                    <div class="form-group">
+                        <input type="text"  name="inputGroup" id="inputGroup"  class="form-control" placeholder="Group"  />
                     </div>
                     <div class="form-group">
                         <select type="text" name="inputOwner" id="inputOwner" class="form-control">
@@ -300,6 +305,9 @@
                     </div>
                     <div class="form-group">
                         <input type="text"  name="inputPhoneNumber" id="editPhoneNumber"  class="form-control" placeholder="Phone Number"  />
+                    </div>
+                    <div class="form-group">
+                        <input type="text"  name="inputGroup" id="editGroup"  class="form-control" placeholder="Group"  />
                     </div>
                     <div class="form-group">
                         <select type="text" name="inputOwner" id="editOwner" class="form-control">
