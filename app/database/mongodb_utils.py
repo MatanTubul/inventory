@@ -40,7 +40,6 @@ def buildReport(attack, osVersion, data=None, attackProccess=None, issues={}):
 
     for k, v in issues.items():
         d["issues"][k] = v
-    print d["issues"]
     return d
 
 def createCollection(mongo,name):
