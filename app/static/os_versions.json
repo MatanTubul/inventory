@@ -93,6 +93,11 @@
     "7.1.2",
     "8.0",
     "8.1"
-
+  ],
+  "pc": [
+    "Windows 7",
+    "Windows 8",
+    "Windows 10",
+    "Linux"
   ]
 }

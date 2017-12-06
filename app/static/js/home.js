@@ -85,6 +85,9 @@ $(document).ready(function(){
         if ($tr.children('td.os').text() == "Android") {
             attack = "gallery"
         }
+        if ($tr.children('td.os').text() == "PC") {
+            attack = "avi"
+        }
 
         window.open("/loadDeviceReports/"+mac+"/"+attack);
     });
@@ -307,6 +310,10 @@ $(document).ready(function(){
             case "IOS":
                 entry = "ios";
                 break;
+            case "PC":
+                entry = "pc";
+                break;
+
             default:
                 vals = ['Please select OS type'];
                 $osVersions.empty();

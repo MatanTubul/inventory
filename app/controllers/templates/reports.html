@@ -40,18 +40,24 @@
                 </button>
             </div>
             {% endif %}
+            {% if osType != "PC" %}
             <div class="btn-group">
                 <button type="button" class="btn btn-nav" id="stripper">
                     <span ><img class="manImg" src="/static/images/attacks/stripper.png"></img></span>
                     <p>Stripper</p>
                 </button>
             </div>
+            {% endif %}
+            {% if osType == "PC" %}
             <div class="btn-group">
+
                 <button type="button" class="btn btn-nav" id="avi">
                     <span ><img class="manImg" src="/static/images/attacks/avi.png"></img></span>
                     <p>Avi</p>
                 </button>
+
             </div>
+            {% endif %}
         </div>
         <div class="business-card">
             <div class="media">
