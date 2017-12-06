@@ -166,7 +166,7 @@ $(document).ready(function(){
         $('#editAccount').val($tr.children('td.account').text());
         $('#editMacAddress').val($tr.children('td.macAddress').text());
         $('#editPhoneNumber').val($tr.children('td.phoneNumber').text());
-        $('#editPhoneGroup').val($tr.children('td.group').text());
+        $('#editGroup').val($tr.children('td.group').text());
         console.log($tr.children('td.group').text());
         $('#editOwner').val($tr.children('td.owner').text());
         $('#editOs').val($tr.children('td.os').text());
