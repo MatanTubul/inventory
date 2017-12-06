@@ -41,7 +41,7 @@ snowballstemmer==1.2.1
 Sphinx==1.6.5
 sphinx-rtd-theme==0.2.4
 sphinxcontrib-websupport==1.0.1
-SQLAlchemy==1.1.14
+SQLAlchemy==1.1.15
 sqlalchemy-migrate==0.11.0
 sqlparse==0.2.4
 Tempita==0.5.2
