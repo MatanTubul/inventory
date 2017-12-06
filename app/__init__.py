@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.secret_key = 'r?4#/FUKr6u;Vh<s|d1:6-NPg^Rhy]'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:edco123@localhost/wintventory'
 # app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['LOG_FILE'] = 'wintventory.log'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
