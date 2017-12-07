@@ -227,6 +227,10 @@ def validateLogin():
 
 @routes.route('/lockDevice', methods=['POST'])
 def lockDevice():
+    """
+    Handling lock device request, in case is not locked device attached to user
+    :return: json response
+    """
     try:
         res = {'error': 'Failed to lock device'}
         device = filterSpecificObject(Device,
@@ -250,6 +254,10 @@ def lockDevice():
 
 @routes.route('/unlockDevice', methods=['POST'])
 def unlockDevice():
+    """
+    Unlock device, detach device from a specific user.
+    :return: json response
+    """
     try:
         res = {'error': 'Failed to unlock device'}
         device = filterSpecificObject(Device,
@@ -269,6 +277,12 @@ def unlockDevice():
 
 @routes.route('/resetPassword', methods=['POST'])
 def resetPassword():
+    """
+    Handling reset password request from the user, generating an auth token
+    which expires in 30 minutes. sending an email to the user which including
+    url link to reset is password
+    :return:
+    """
     try:
         res = {'error':'Failed to restore password'}
         user = filterSpecificObject(User, username=request.form['email'])
@@ -296,6 +310,11 @@ in case it is not you, ignore this mail.""" % (user.name,request.base_url,token)
 
 @routes.route('/resetPassword/<token>')
 def authToken(token):
+    """
+    Redirecting to reset password page if token is valid
+    :param token: auth token
+    :return: json response
+    """
     user = User.verify_auth_token(token)
     if not user:
         return render_template('error.html', error='Unauthorized Access')
@@ -303,6 +322,10 @@ def authToken(token):
 
 @routes.route('/updatePassword',methods=['POST'])
 def updatePassword():
+    """
+    Updating user password
+    :return: json response
+    """
     user = User.verify_auth_token(request.values.get('token', None))
     if not user:
         return jsonify({'error':'Failed to update password'})
@@ -313,6 +336,10 @@ def updatePassword():
 
 @routes.route('/getUserNamesList', methods=['GET', 'POST'])
 def getUsersNameList():
+    """
+    Retrives users list
+    :return:
+    """
     res = selectObject(User, User.username, isDeleted=0)
     users = {'users':[]}
     for user in res:
@@ -321,6 +348,10 @@ def getUsersNameList():
 
 @routes.route('/updateUser', methods=['POST'])
 def updateUser():
+    """
+    Updating user role
+    :return:
+    """
     user = filterSpecificObject(User,
                                 username=request.values.get('username', None))
     if user:
@@ -331,6 +362,10 @@ def updateUser():
 
 @routes.route('/deleteUser', methods=['POST'])
 def deleteUser():
+    """
+    Revoke user from the system
+    :return:
+    """
     user = filterSpecificObject(User,
                                 username=request.values.get('username', None))
     if user:
@@ -341,6 +376,10 @@ def deleteUser():
 
 @routes.route('/showHistory')
 def showHistory():
+    """
+    Loading History page
+    :return:
+    """
     if session.get('user'):
         return render_template('history.html',
                                role=session.get('role'),
@@ -352,6 +391,10 @@ def showHistory():
 
 @routes.route('/getHistoryEvents', methods=['POST'])
 def getUserActionsHistory():
+    """
+    Get lock/unlock activity history of users
+    :return:
+    """
     try :
         startEventDate = datetime.strptime(request.values.get('date', None), '%Y-%m-%d')
         endEventDate = startEventDate.replace(minute=59, hour=23, second=59)
@@ -370,7 +413,13 @@ def getUserActionsHistory():
 
 @routes.route('/loadDeviceReports/<mac>/<attack>')
 def loadDeviceReports(mac, attack):
-    try :
+    """
+    Load device reprot based on is os type
+    :param mac: device mac address
+    :param attack: default attack (IOS: gold_apple, Android: gallery, PC: Avi)
+    :return: template with extra data
+    """
+    try:
         device = filterSpecificObject(Device, macAddress=mac)
         os = device.os
         if device:
@@ -403,10 +452,14 @@ def loadDeviceReports(mac, attack):
                                    deviceName = device.name)
     except Exception as e :
         logger.warning(e)
+        return redirect("/", code=302)
 
 @routes.route('/updateReportDocument', methods=['POST','GET'])
 def updateReportDocument():
-
+    """
+    Update sub document on report collection
+    :return:
+    """
     try :
         json_data = Utils.getRequestJSON()
         attackProccess = None
@@ -448,5 +501,6 @@ def updateReportDocument():
         return {'error': "Failed to update report"}
     except Exception as e :
         logger.warning(e)
+        return redirect("/", code=302)
 
 
