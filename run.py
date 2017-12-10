@@ -15,7 +15,7 @@ def argsPars():
 if __name__ == '__main__':
     args = argsPars()
     formatter = "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s"
-    logging.basicConfig(filename=app.config['LOG_FILE'], level=logging.DEBUG, format=formatter)
+    logging.basicConfig(filename=app.config['LOG_FILE'], level=logging.INFO, format=formatter)
     log = logging.getLogger(app.config['LOG_FILE'])
     handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=10000000, backupCount=5)
     log.addHandler(handler)
