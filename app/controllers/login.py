@@ -4,6 +4,7 @@ from flask import Blueprint, \
     redirect,\
     session, \
     json, jsonify
+from flask import render_template
 from werkzeug import generate_password_hash, check_password_hash
 from app import app
 from app.models import User

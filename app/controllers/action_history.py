@@ -29,7 +29,9 @@ def showHistory():
                                user=session.get('user'),
                                username=session.get('userName')
                                )
+
     else:
+        logger.warning("User session was not found")
         return render_template('error.html', error='Unauthorized Access')
 
 @history.route('/getHistoryEvents', methods=['POST'])
@@ -50,6 +52,7 @@ def getUserActionsHistory():
                 event["text"] = str(e.user_id).split("@")[0]+" "+e.action
                 events.append(event.copy())
             return jsonify({'events':events})
+        logger.warning("Can't parse startEventDate: %s ", startEventDate)
         return jsonify({'error':'Failed to get events'})
     except Exception as e :
         logger.warning(e)
