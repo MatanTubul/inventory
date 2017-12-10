@@ -1,3 +1,7 @@
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -35,3 +39,7 @@ app.register_blueprint(devices)
 app.register_blueprint(reset_password)
 app.register_blueprint(login)
 app.register_blueprint(sign_up)
+
+http_server = HTTPServer(WSGIContainer(app))
+http_server.listen(5000)
+IOLoop.instance().start()
