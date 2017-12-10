@@ -1,6 +1,7 @@
 alabaster==0.7.10
 alembic==0.9.6
 Babel==2.5.1
+backports-abc==0.5
 BareNecessities==0.2.8
 blinker==1.4
 certifi==2017.7.27.1
@@ -36,6 +37,7 @@ python-dateutil==2.6.1
 python-editor==1.0.3
 pytz==2017.3
 requests==2.18.4
+singledispatch==3.4.0.3
 six==1.11.0
 snowballstemmer==1.2.1
 Sphinx==1.6.5
@@ -45,6 +47,7 @@ SQLAlchemy==1.1.15
 sqlalchemy-migrate==0.11.0
 sqlparse==0.2.4
 Tempita==0.5.2
+tornado==4.5.2
 traceback2==1.4.0
 typing==3.6.2
 unittest2==1.1.0
