@@ -6,6 +6,7 @@ class Device(db.Model):
     account = db.Column(db.String(256))
     macAddress = db.Column(db.String(64), index=True, primary_key=True)
     phoneNumber = db.Column(db.String(20))
+    group = db.Column(db.String(20))
     owner = db.Column(db.String(30))
     os = db.Column(db.String(30))
     osVersion = db.Column(db.String(30))
@@ -15,6 +16,7 @@ class Device(db.Model):
                  account,
                  macAdress,
                  phone,
+                 group,
                  owner,
                  os,
                  osVersion,
@@ -23,6 +25,7 @@ class Device(db.Model):
         self.account = account
         self.macAddress = macAdress
         self.phoneNumber = phone
+        self.group = group
         self.owner = owner
         self.os = os
         self.osVersion = osVersion

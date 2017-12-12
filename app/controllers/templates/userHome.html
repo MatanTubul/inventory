@@ -3,31 +3,31 @@
 
 <head>
     <title>Wintego Inventory</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
-    <script src="../static/js/home.js"></script>
+    <script src="/static/js/home.js"></script>
+    <script src="/static/js/main.js"></script>
     <link rel="icon" href="../static/images/favicons.png">
-    <link href="../static/css/home.css" rel="stylesheet">
-    <link href="../static/css/main.css" rel="stylesheet">
+    <link href="/static/css/home.css" rel="stylesheet">
+    <link href="/static/css/main.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">Phones</a></li>
-            <li><a href="#">Wint</a></li>
-            <li><a href="#">Licenses</a></li>
+            <!--<li><a href="#">Wint</a></li>-->
+            <!--<li><a href="#">Licenses</a></li>-->
             {% if role == 'admin' %}
-            <li><a href="showSignUp">Create User</a></li>
+            <li><a href="showSignUp">Users</a></li>
             {% endif %}
+            <li><a href="showHistory">History</a></li>
             <div>
                 <ul class="nav nav-pills pull-right">
                     <li role="presentation" class="active">
@@ -57,66 +57,75 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-hover table-bordered table-list" id="deviceTable">
-                        <thead>
-                        <tr>
-                            <th><em class="fa fa-cog"></em></th>
-                            <th class="hidden-xs">#</th>
-                            <th>Device Name</th>
-                            <th>Account</th>
-                            <th>Mac Address</th>
-                            <th>Phone Number</th>
-                            <th>Owner</th>
-                            <th>OS</th>
-                            <th>Version</th>
-                        </tr>
-                        <tr class="warning no-result">
-                            <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
-                        </tr>
-                        </thead>
-                        <tbody>
+                    <div class="table-body">
+                        <table class="table table-hover table-bordered table-list" id="deviceTable">
+                            <thead class="table-head">
+                            <tr class="table-head-row">
+                                <th><em class="fa fa-cog"></em></th>
+                                <th class="hidden-xs">#</th>
+                                <th>Device Name</th>
+                                <th>Account</th>
+                                <th>Mac Address</th>
+                                <th>Phone Number</th>
+                                <th>Owner</th>
+                                <th>OS</th>
+                                <th>Version</th>
+                                <th>Group</th>
+                                <th>Reports</th>
+                            </tr>
+                            <tr class="warning no-result">
+                                <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
+                            </tr>
+                            </thead>
 
-                        {% for value in devices %}
-                        <tr >
+                            <tbody>
+                            {% for value in devices %}
+                            <tr >
 
-                            <td  align="center"  >
-                                {% if not value["owner"] %}
-                                <a class="btn  btn-lock-clicked" title="Lock device" >
-                                    <em class="fa fa-lock"></em>
-                                </a>
-                                {% endif %}
-                                {% if value["owner"] %}
-                                <a class="btn  btn-unlock-clicked" title="Unlock device" >
-                                    <em class="fa fa fa-unlock"></em>
-                                </a>
-                                {% endif %}
-                                {% if role == 'admin' %}
-                                <a class="btn btn-default btn-default-clicked" title="Edit device"  >
-                                    <em class="fa fa-pencil"></em>
-                                </a>
-                                <a class="btn btn-danger btn-danger-clicked" title="Delete device" >
-                                    <em class="fa fa-trash"></em>
-                                </a>
-                                {% endif %}
+                                <td  align="center"  >
+                                    {% if not value["owner"] %}
+                                    <a class="btn  btn-lock-clicked" title="Lock device" >
+                                        <em class="fa fa-lock"></em>
+                                    </a>
+                                    {% endif %}
+                                    {% if value["owner"] == username %}
+                                    <a class="btn  btn-unlock-clicked" title="Unlock device" >
+                                        <em class="fa fa fa-unlock"></em>
+                                    </a>
+                                    {% elif value["owner"]  %}
+                                    <a class="btn  btn-unlock-unavailable" title="Unlock device unavailable" >
+                                        <em class="fa fa fa-lock"></em>
+                                    </a>
+                                    {% endif %}
+                                    {% if role == 'admin' and  not value["owner"]  %}
+                                    <a class="btn btn-default btn-default-clicked" title="Edit device"  >
+                                        <em class="fa fa-pencil"></em>
+                                    </a>
+                                    <a class="btn btn-danger btn-danger-clicked" title="Delete device" >
+                                        <em class="fa fa-trash"></em>
+                                    </a>
+                                    {% endif %}
+                                </td>
 
-                            </td>
-
-                            <td class="hidden-xs">{{loop.index}}</td>
-                            <td class="deviceName">{{value["name"]}}</td>
-                            <td class="account">{{value["account"]}}</td>
-                            <td class="macAddress">{{value["macAddress"]}}</td>
-                            <td class="phoneNumber">{{value["phoneNumber"]}}</td>
-                            <td class="owner">{{value["owner"]}}</td>
-                            <td class="os">{{value["os"]}}</td>
-                            <td class="osVersion">{{value["osVersion"]}}</td>
-                        </tr>
-                        {% else %}
-                        <tr class="warning">
-                            <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                                <td class="hidden-xs">{{loop.index}}</td>
+                                <td class="deviceName">{{value["name"]}}</td>
+                                <td class="account">{{value["account"]}}</td>
+                                <td class="macAddress">{{value["macAddress"]}}</td>
+                                <td class="phoneNumber">{{value["phoneNumber"]}}</td>
+                                <td class="owner">{{value["owner"]}}</td>
+                                <td class="os">{{value["os"]}}</td>
+                                <td class="osVersion">{{value["osVersion"]}}</td>
+                                <td class="group">{{value["group"]}}</td>
+                                <td><a  class="report">Report</a></td>
+                            </tr>
+                            {% else %}
+                            <tr class="warning">
+                                <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
             </div>
@@ -149,12 +158,18 @@
                         <input type="text"  name="inputPhoneNumber" id="inputPhoneNumber"  class="form-control" placeholder="Phone Number"  />
                     </div>
                     <div class="form-group">
-                        <input type="text" name="inputOwner" id="inputOwner" class="form-control" placeholder="Owner"/>
+                        <input type="text"  name="inputGroup" id="inputGroup"  class="form-control" placeholder="Group"  />
+                    </div>
+                    <div class="form-group">
+                        <select type="text" name="inputOwner" id="inputOwner" class="form-control">
+                            <option value="">Please select owner</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <select class="form-control"  name="inputOs" id="inputOs" >
                             <option value="Android">Android</option>
                             <option value="IOS">IOS</option>
+                            <option value="PC">PC</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -175,7 +190,7 @@
 <div class="modal fade" id="modalResponse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header modal-header-ok">
+            <div class="modal-header modal-header-ok" id="modalOnResponseHeader">
                 <h5 class="modal-title" id="responseModalTitle">Device created</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -291,13 +306,19 @@
                         <input type="text"  name="inputPhoneNumber" id="editPhoneNumber"  class="form-control" placeholder="Phone Number"  />
                     </div>
                     <div class="form-group">
-                        <input type="text" name="inputOwner" id="editOwner" class="form-control" placeholder="Owner"/>
+                        <input type="text"  name="inputGroup" id="editGroup"  class="form-control" placeholder="Group"  />
+                    </div>
+                    <div class="form-group">
+                        <select type="text" name="inputOwner" id="editOwner" class="form-control">
+                            <option value="">Please select owner</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <select class="form-control"  name="inputOs" id="editOs" >
                             <option value="selectMessage" selected>Please Select OS</option>
                             <option value="Android">Android</option>
                             <option value="IOS">IOS</option>
+                            <option value="PC">PC</option>
                         </select>
                     </div>
                     <div class="form-group">

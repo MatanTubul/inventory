@@ -16,11 +16,11 @@ $(document).ready(function(){
             rules: {
                 password: {
                     required: true,
-                    email:true,
                     maxlength:30
                 },
                 confirmPassword:{
-                    required:true
+                    required:true,
+                    equalTo: "#password"
                 }
             },
             messages:{
@@ -29,7 +29,8 @@ $(document).ready(function(){
                     maxlength: "Input is too long"
                 },
                 confirmPassword:{
-                    required: "Password do not match"
+                    required: "Confirm Password is required",
+                    equalTo: "Password do not match"
                 }
             },
             errorPlacement: function (error, element) {
@@ -43,7 +44,7 @@ $(document).ready(function(){
         if ($('#reset-password-form').valid()){
             $.ajax({
                 url: '/updatePassword',
-                data: $('form').serialize(),
+                data: {'password':$('#password').val(),'token':$('#token').val()},
                 type: 'POST',
                 success: function (response) {
                     if(response.hasOwnProperty('error')){
@@ -71,7 +72,7 @@ $(document).ready(function(){
     });
 
     $('#btnCloseResponseModal').click(function(){
-        $("#createUserForm").validate().resetForm();
-        $("#createUserForm")[0].reset();
+        console.log("rediredt");
+        window.location.replace("/");
     });
 });

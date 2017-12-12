@@ -9,12 +9,20 @@ class User(db.Model):
     password = db.Column(db.String(256))
     name = db.Column(db.String(64))
     role = db.Column(db.String(20))
+    isDeleted = db.Column(db.Boolean, default=0, nullable=False)
+    actions = db.relationship("History", backref="user", lazy=True, uselist=False)
 
-    def __init__(self, username, password, name, role):
+    def __init__(self,
+                 username,
+                 password,
+                 name,
+                 role):
+
         self.username = username
         self.password = password
         self.name = name
         self.role = role
+
 
     def __repr__(self):
         return '<User %r>' % (self.username)

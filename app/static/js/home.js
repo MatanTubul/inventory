@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+    loadUsers();
     $.validator.addMethod("regx", function(value, element, regexpr) {
         return regexpr.test(value);
     }, "Please enter a valid Mac Address.");
@@ -78,14 +78,19 @@ $(document).ready(function(){
         }
     });
 
-    //validate editDevice form
-    $('#editDeviceForm').click(function () {
-        if($('#editDeviceForm').valid()){
-
+    $('.report').click(function () {
+        var $tr = $(this).closest('tr');
+        var mac = $tr.children('td.macAddress').text();
+        var attack = "gold_apple"
+        if ($tr.children('td.os').text() == "Android") {
+            attack = "gallery"
+        }
+        if ($tr.children('td.os').text() == "PC") {
+            attack = "avi"
         }
 
+        window.open("/loadDeviceReports/"+mac+"/"+attack);
     });
-
     //Handling lock device
     $('body').on('click', '.btn-lock-clicked', function () {
         var $tr = $(this).closest('tr');
@@ -101,19 +106,21 @@ $(document).ready(function(){
             type: 'POST',
             success: function(response){
                 $('#lockDevice').modal('hide');
+                console.log(response);
                 if(response.hasOwnProperty('error')){
                     $('#modalOnResponseHeader').css('background', '#E2747E');
-                    $('#modalResponseTitle').text("Failed");
-                    $('#modalResponseBody').text("Failed to lock device with error, "+response.error);
+                    $('#responseModalTitle').text("Failed");
+                    $('#modalResponseBody').text(response.error);
+
                 }else{
                     $('#responseModalTitle').text("Locked");
                     $('#modalResponseBody').text(response.message);
-                    $('#modalResponse').modal('show');
                 }
+                $('#modalResponse').modal('show');
 
             },
             error: function(error){
-                // console.log(error);
+                console.log(error);
             }
         });
     });
@@ -152,16 +159,19 @@ $(document).ready(function(){
     });
 
     //Handling edit onClick event
-    $('body').on('click','.btn-default-clicked',function(){
+    $('body').on('click','.btn-default-clicked', function(){
         var $tr = $(this).closest('tr');
         var $osVersions = $('#editOsVersion');
         $('#editDeviceName').val($tr.children('td.deviceName').text());
         $('#editAccount').val($tr.children('td.account').text());
         $('#editMacAddress').val($tr.children('td.macAddress').text());
         $('#editPhoneNumber').val($tr.children('td.phoneNumber').text());
+        $('#editGroup').val($tr.children('td.group').text());
+        console.log($tr.children('td.group').text());
         $('#editOwner').val($tr.children('td.owner').text());
         $('#editOs').val($tr.children('td.os').text());
         $('#editOs').attr('disabled','disabled');
+        $('#editMacAddress').attr('disabled','disabled');
         //loading os versions
         $osVersions.empty();
         var request = new XMLHttpRequest();
@@ -180,25 +190,27 @@ $(document).ready(function(){
 
     //Handling update device request
     $('#btnEditDevice').click(function () {
-
+        var disabled = $('#editDeviceForm').find(':input:disabled').removeAttr('disabled');
         $.ajax({
             url: '/updateDevice',
             data: $('#editDeviceForm').serialize(),
             type: 'POST',
             success: function(response){
+                disabled.attr('disabled','disabled');
                 $('#editDevice').modal('hide');
                 if(response.hasOwnProperty('error')){
                     $('#modalOnResponseHeader').css('background', '#E2747E');
                     $('#modalResponseTitle').text("Failed");
-                    $('#modalResponseBody').text("Failed to create device with error, "+res.error);
+                    $('#modalResponseBody').text(response.error);
                 }else{
                     $('#responseModalTitle').text("Device updated");
                     $('#modalResponseBody').text("Device updated successfully");
-                    $('#modalResponse').modal('show');
                 }
+                $('#modalResponse').modal('show');
 
             },
             error: function(error){
+                disabled.attr('disabled','disabled');
                 // console.log(error);
             }
         });
@@ -228,9 +240,6 @@ $(document).ready(function(){
         // $tr.remove();
     });
 
-
-
-
     //Delete selected device row
     $('#btnDelteYes').click(function () {
         var mac = $('#approveDeviceDelete').data('mac');
@@ -255,6 +264,36 @@ $(document).ready(function(){
             }
         });
     });
+    function loadUsers () {
+        $.ajax({
+            url: '/getUserNamesList',
+            data: {},
+            type: 'GET',
+            success: function (response) {
+                if (response.hasOwnProperty('error')) {
+                    $('#modalOnResponseHeader').css('background', '#E2747E');
+                    $('#modalResponseTitle').text("Failed");
+                    $('#modalResponseBody').text("Failed to create device with error, " + res.error);
+                } else {
+                    // window.location.reload();
+
+                    $.each( response['users'], function( index, value ){
+                        $('#inputOwner').append($('<option/>', {
+                            value: value,
+                            text : value
+                        }));
+                        $('#editOwner').append($('<option/>', {
+                            value: value,
+                            text : value
+                        }));
+                    });
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
 
     //loading os version depend on  os type
     $('#inputOs').change(function () {
@@ -271,6 +310,10 @@ $(document).ready(function(){
             case "IOS":
                 entry = "ios";
                 break;
+            case "PC":
+                entry = "pc";
+                break;
+
             default:
                 vals = ['Please select OS type'];
                 $osVersions.empty();
@@ -290,32 +333,6 @@ $(document).ready(function(){
 
     //trigger on change event for os version dropdown
     $('#inputOs').trigger('change');
-
-    $(".search").keyup(function () {
-        var searchTerm = $(".search").val();
-        var listItem = $('.results tbody').children('tr');
-        var searchSplit = searchTerm.replace(/ /g, "'):containsi('");
-
-        $.extend($.expr[':'], {'containsi': function(elem, i, match, array){
-            return (elem.textContent || elem.innerText || '').toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
-        }
-        });
-
-        $(".results tbody tr").not(":containsi('" + searchSplit + "')").each(function(e){
-            $(this).attr('visible','false');
-        });
-
-        $(".results tbody tr:containsi('" + searchSplit + "')").each(function(e){
-            $(this).attr('visible','true');
-        });
-
-        var jobCount = $('.results tbody tr[visible="true"]').length;
-        $('.counter').text(jobCount + ' items');
-
-        if(jobCount == '0') {$('.no-result').show();}
-        else {$('.no-result').hide();}
-    });
-
 });
 
 
