@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+  <link rel="icon" href="../static/images/favicons.png">
+  <script src="/static/js/signUp.js"></script>
+  <script src="/static/js/main.js"></script>
+  <link href="/static/css/signup.css" rel="stylesheet">
+  <link href="/static/css/main.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div class="container">
+  <div class="header">
+    <ul class="nav nav-tabs">
+      <li ><a href="/userHome">Phones</a></li>
+      <!--<li><a href="#">Wint</a></li>-->
+      <!--<li><a href="#">Licenses</a></li>-->
+      <li class="active"><a href="showSignUp">Users</a></li>
+      <li ><a href="showHistory">History</a></li>
+      <ul class="nav nav-pills pull-right">
+        <li role="presentation" class="active">
+          <a href="/logout" class="fa fa-sign-out ">
+            <span class="glyphicons glyphicons-log-out"></span></a>
+        </li>
+        <li class="user-name"> Welcome {{user}}</li>
+      </ul>
+    </ul>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-10 col-centered">
+          <div class="panel panel-default panel-table results">
+            <div class="panel-heading">
+
+              <div class="row">
+                <div class="form-group pull-right searcher">
+                  <input type="text" class="search form-control" placeholder="What you looking for?">
+                </div>
+                <div class="">
+                  <button type="button" title="Create User" class="btn btn-sm btn-primary btn-create create-user-btn" data-toggle="modal" data-target="#modalCreateUser">Add User</button>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="table-body">
+                <table class="table table-hover table-bordered table-list" id="usersTable">
+                  <thead>
+                  <tr>
+                    <th><em class="fa fa-cog"></em></th>
+                    <th class="hidden-xs">#</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                  </tr>
+                  <tr class="warning no-result">
+                    <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
+                  </tr>
+                  </thead>
+                  <tbody>
+
+                  {% for value in users %}
+                  <tr >
+                    <td  align="center"  >
+                      {% if role == 'admin' and  not value["owner"]  %}
+                      <a class="btn btn-default btn-default-clicked" title="Edit user role"  >
+                        <em class="fa fa-pencil"></em>
+                      </a>
+                      <a class="btn btn-danger btn-danger-clicked" title="Delete user" >
+                        <em class="fa fa-trash"></em>
+                      </a>
+                      {% endif %}
+
+                    </td>
+
+                    <td class="hidden-xs">{{loop.index}}</td>
+                    <td class="UserFullName">{{value["name"]}}</td>
+                    <td class="userName">{{value["username"]}}</td>
+                    <td class="role">{{value["role"]}}</td>
+                  </tr>
+                  {% else %}
+                  <tr class="warning">
+                    <td colspan="10" ><i class="fa fa-warning"></i> No result</td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <span class="counter "></span>
+    </div>
+  </div>
+  <!-- Modal Create user -->
+  <div class="modal fade" id="modalCreateUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header " id="modalCreateUserHeader">
+          <h5 class="modal-title" id="modalCreateUserTitle">Create User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modalCreateUserBody">
+          <div class="create-user">
+            <form class="form-signin create-user-form" id="createUserForm">
+              <label for="inputName" class="sr-only">Name</label>
+              <input type="text" name="inputName" id="inputName" class="form-control sign-up-inputs" placeholder="Name"  autofocus>
+              <label for="inputEmail" class="sr-only">Email address</label>
+              <input type="email" name="inputEmail" id="inputEmail" class="form-control sign-up-inputs" placeholder="Email address" >
+              <label for="inputPassword" class="sr-only">Password</label>
+              <input type="password" name="inputPassword" id="inputPassword" class="form-control sign-up-inputs" placeholder="Password" >
+              <div class="form-group">
+                <select class="form-control"  name="inputUserRule" id="inputUserRule" >
+                  <option value="" selected>Please select user role</option>
+                  <option value="admin">admin</option>
+                  <option value="guest">guest</option>
+                </select>
+              </div>
+              <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="button">Create User</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /create user modal -->
+
+<!-- Modal Response-->
+<div class="modal fade" id="modalResponse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header modal-header-ok" id="modalOnResponseHeader">
+        <h5 class="modal-title" id="modalResponseTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalResponseBody">
+
+      </div>
+      <div class="modal-footer">
+        <button id="btnCloseResponseModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- edit user modal -->
+<div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="editUserLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editUserLabel">Edit User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <select type="text" name="userRole" id="userRole" class="form-control">
+            <option value="admin">Admin</option>
+            <option value="guest">Guest</option>
+          </select>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="btnEditUserFormClose" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="btnEditUser" type="button" class="btn btn-primary" >Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /edit user modal -->
+
+<!-- start: Delete User Modal -->
+<div class="modal fade" id="approveUserDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Warning!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4> Are you sure you want to DELETE?</h4>
+      </div>
+      <!--/modal-body-collapse -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger " id="btnDelteYes" href="#">Yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+      </div>
+      <!--/modal-footer-collapse -->
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<footer class="footer">
+  <p> <h3><img src="../static/images/wintego.png"></h3></p>
+</footer>
+</body>
+</html>

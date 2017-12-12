@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{deviceName}}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+    <link rel="icon" href="/static/images/favicons.png">
+    <script src="/static/js/reports.js"></script>
+    <link href="/static/css/reports.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="btn-group btn-group-justified">
+            <meta id="selectedAttack" data-name="{{attack}}" data-other="{{attack}}">
+            {% if osType == "IOS" %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-nav" id="gold_apple">
+                    <span ><img class="manImg" src="/static/images/attacks/gold_apple.png"></img></span>
+                    <p>Gold Apple</p>
+                </button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-nav" id="blue_apple">
+                    <span ><img class="manImg" src="/static/images/attacks/blue_apple.png"></img></span>
+                    <p>Blue Apple</p>
+                </button>
+            </div>
+            {% endif %}
+            {% if osType == "Android" %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-nav" id="gallery">
+                    <span ><img class="manImg" src="/static/images/attacks/gallery.png"></img></span>
+                    <p>Gallery</p>
+                </button>
+            </div>
+            {% endif %}
+            {% if osType != "PC" %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-nav" id="stripper">
+                    <span ><img class="manImg" src="/static/images/attacks/stripper.png"></img></span>
+                    <p>Stripper</p>
+                </button>
+            </div>
+            {% endif %}
+            {% if osType == "PC" %}
+            <div class="btn-group">
+
+                <button type="button" class="btn btn-nav" id="avi">
+                    <span ><img class="manImg" src="/static/images/attacks/avi.png"></img></span>
+                    <p>Avi</p>
+                </button>
+
+            </div>
+            {% endif %}
+        </div>
+        <div class="business-card">
+            <div class="media">
+                <div class="media-left">
+                    <i class="fa fa-mobile fa-5x"></i>
+                </div>
+                <div class="media-body">
+                    <h2 class="media-heading">{{report["name"]}}</h2>
+                    <div class="macAddress">{{report["_id"]}}</div>
+                    <div class="mail">{{report["account"]}}</a> </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="inbox">
+            <div class="fab btn-group show-on-hover dropup">
+                <div data-toggle="tooltip" data-placement="left" title="Compose" style="margin-left: 42px;">
+                    <button type="button" class="btn btn-primary btn-io dropdown-toggle" data-toggle="dropdown">
+            <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x fab-backdrop"></i>
+                <i class="fa  fa-cog fa-stack-1x fa-inverse fab-primary"></i>
+                <i class="fa fa-pencil fa-stack-1x fa-inverse fab-secondary"></i>
+            </span>
+                    </button>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li id="saveReport" ><a data-toggle="tooltip" data-placement="left" title="Save"><i class="fa  fa-floppy-o"></i></a></li>
+                    <li><a  data-toggle="tooltip" data-placement="left" title="Success"><i class="fa fa-check-circle" id="addToSuccess"></i></a></li>
+                    <li><a  data-toggle="tooltip" data-placement="left" title="TODO"><i class="fa fa-list-alt" id="addTodo"></i></a></li>
+                    <li><a  data-toggle="tooltip" data-placement="left" title="Partial"><i class="fa fa-exclamation-triangle" id="addToPartial"></i></a></li>
+                    <li><a  data-toggle="tooltip" data-placement="left" title="Failed"><i class="fa fa-times-circle" id="addToFailed"></i></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <div class="tree well">
+                <ul class="treeList">
+                    <li class="level1">
+                        <span id="deviceName" class="fa fa-tablet"> {{report["name"]}}</span>
+                        <ul >
+                            {% for v in report["reports"] %}
+                            <li class="level2">
+                                <span id="{{v['_id']}}" class="fa fa-code-fork"> {{v["_id"]}} </span>
+                                <ul class="level3">
+
+                                    {% for key, value in v.items() recursive %}
+                                        {% if key != '_id' %}
+                                        <li  >
+                                            {% if value is not mapping %}
+                                                {% if key == 'status' %}
+                                                    <span class="status" > {{value}}</span>
+                                                {% elif key == 'updated_on' %}
+                                                    <span id="updateOn" class="fa fa-calend ar-o "> {{value}} </span>
+                                                {% else %}
+                                                    <span  class="span_issue_url" title="{{value}}">
+                                                        <a class="url_hyper_link " target="_blank" href="https://{{key}}"> https://{{key}}</a>
+                                                    </span>
+                                                    <i class="fa fa-minus-square delete_issue"></i>
+                                                {% endif %}
+
+                                            {% endif %}
+                                            {% if value is mapping  %}
+                                                {% if key == 'attackProccess' %}
+                                                <span id="attackProccess" class="fa fa-sitemap"> {{key}} </span>
+                                                {% elif key == 'data' %}
+                                                <span id="data" class="fa fa-database">  data </span>
+                                                {% elif key == 'issues' %}
+                                                <span class="fa fa-bug issues" id="issues"> issues</span>
+                                                <ul class="issues_list">
+                                                    <li>
+                                                        <span class="fa fa-plus add_issues"></span>
+                                                    </li></ul>
+
+                                                {% else %}
+                                                <span id="{{key}}" class="fa fa-minus-circle" > {{key}} </span>
+
+                                                {% endif %}
+                                                <ul id="{{key}}">
+                                                    {{ loop(value.items())}}
+                                                </ul>
+                                            {% endif %}
+                                        </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Issue Modal -->
+<div class="modal fade" id="modalIssue" tabindex="-1" role="dialog" aria-labelledby="issueLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="panel-title" id="contactLabel">Add Issue</h4>
+            </div>
+            <form action="#" method="post" accept-charset="utf-8">
+                <div class="modal-body" style="padding: 5px;">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 10px;">
+                            <input class="form-control" name="subject" placeholder="Git url" type="url" required id="issue_url" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <textarea  id="issue_desc" style="resize:vertical;" maxlength="100" class="form-control" placeholder="Issue description up to 100 chars" rows="6" name="comment" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="panel-footer" style="margin-bottom:-14px;">
+                <input type="button" class="btn btn-success" value="Save" id="addIssues"/>
+                <!--<span class="glyphicon glyphicon-ok"></span>-->
+                <input type="reset" class="btn btn-danger" value="Clear" />
+                <!--<span class="glyphicon glyphicon-remove"></span>-->
+                <button style="float: right;" type="button" class="btn btn-default btn-close" data-dismiss="modal">Close</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Static Modal -->
+<div class="modal modal-static fade" id="processing-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4>Saving Report</h4>
+                    <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% extends "base.html" %}
+</div>
+</body>
+</html>

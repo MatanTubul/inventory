@@ -1,0 +1,16 @@
+.create-device-btn {
+    margin-left: 10px;
+}
+.btn-lock-clicked {
+    background-color: #0080c8;
+    color: #FFFFFF;
+}
+.btn-unlock-clicked {
+    background-color: #0080c8;
+    color: #FFFFFF;
+}
+
+.btn-unlock-unavailable {
+    background-color: #777;
+    color: white;
+}
