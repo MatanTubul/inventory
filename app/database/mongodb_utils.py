@@ -9,7 +9,6 @@ from datetime import datetime
 from collections import OrderedDict
 from bson.codec_options import CodecOptions
 
-#TODO add basic abilities to report
 reports_dict = {"gold_apple":gold_apple_report,
                 "blue_apple":blue_apple_report,
                 "gallery":android_report,

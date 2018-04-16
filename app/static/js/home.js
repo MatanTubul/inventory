@@ -91,6 +91,15 @@ $(document).ready(function(){
 
         window.open("/loadDeviceReports/"+mac+"/"+attack);
     });
+
+    $('.accounts').click(function () {
+        var $tr = $(this).closest('tr');
+        var mac = $tr.children('td.macAddress').text();
+        var account = $tr.children('td.account').text();
+        var dname = $tr.children('td.deviceName').text();
+        window.open("/loadAccounts/"+mac+"/"+account+"/"+dname);
+
+    });
     //Handling lock device
     $('body').on('click', '.btn-lock-clicked', function () {
         var $tr = $(this).closest('tr');

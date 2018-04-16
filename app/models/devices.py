@@ -11,6 +11,8 @@ class Device(db.Model):
     os = db.Column(db.String(30))
     osVersion = db.Column(db.String(30))
     isDeleted = db.Column(db.Boolean)
+    accounts = db.relationship("Account", backref="account", lazy=True, uselist=False)
+
 
     def __init__(self, name,
                  account,

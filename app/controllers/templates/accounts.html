@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accounts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+    <link href="/static/css/main.css" rel="stylesheet">
+    <link rel="icon" href="../static/images/favicons.png">
+    <link href="/static/css/accounts.css" rel="stylesheet">
+    <script src="/static/js/accounts.js"></script>
+</head>
+<body>
+
+<div class="panel-body">
+
+    <div class="table-body">
+        <div class="container-fluid well span6">
+            <div class="row-fluid">
+
+                <div class="span8">
+                    <h3 class="card_dname">{{device_name}}</h3>
+                    <h5 class="card_mac">Mac:{{mac}}</h5>
+                    <h5 class="card_account">Account: {{account}}</h5>
+                </div>
+            </div>
+        </div>
+        <table class="table table-hover table-bordered table-list" id="accountsTable">
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="checkall" /></th>
+                <th class="hidden-xs">#</th>
+                <th>App</th>
+                <th>Username</th>
+                <th>Password</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for value in accounts %}
+            <tr >
+                <td><input type="checkbox" class="checkthis" /></td>
+                <td class="hidden-xs">{{loop.index}}</td>
+                <td class="app">{{value["app"]}}</td>
+                <td class="username">{{value["username"]}}</td>
+                <td class="password">{{value["password"]}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="list-group list-group-horizontal">
+        <button type="button" title="Add new category" class="btn btn-sm btn-primary btn-create create-device-btn" data-toggle="modal" data-target="#createAccount">Add App</button>
+        <button type="button" title="Edit selected" class="btn btn-sm btn-primary btn-create create-device-btn" data-toggle="modal" data-target="#editAccounts">Edit selected</button>
+    </div>
+
+</div>
+
+
+<!-- edit accounts modal -->
+<div class="modal fade" id="editAccounts" tabindex="-1" role="dialog" aria-labelledby="editAccountsLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAccountsLabel">Edit Accounts</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editAccountForm">
+                    <div class="form-group" >
+                        <div class="form-group">
+                            <input type="text" name="inputAccountUserName" id="inputAccountUserName" class="form-control" placeholder="Account User Name" autofocus/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="inputAccountPassword" id="inputAccountPassword" class="form-control" placeholder="Account Password"/>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button id="btnEditAccountFormClose" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="btnEditAccount" type="button" class="btn btn-primary" >Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /edit accounts modal -->
+<!-- create account modal -->
+<div class="modal fade" id="createAccount" tabindex="-1" role="dialog" aria-labelledby="editAccountsLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createAccountsLabel">Edit Accounts</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createAccountForm">
+                    <div class="form-group" >
+                        <div class="form-group">
+                            <input type="text" name="createAccountAppName" id="createAccountAppName" class="form-control" placeholder="App Name" autofocus/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="inputAccountUserName" id="createAccountUserName" class="form-control" placeholder="Account User Name"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="inputAccountPassword" id="createAccountPassword" class="form-control" placeholder="Account Password"/>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button id="btnCreateAccountFormClose" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="btnCreateAccount" type="button" class="btn btn-primary" >Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /create account modal -->
+
+</body>
+</html>

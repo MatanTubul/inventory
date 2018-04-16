@@ -45,3 +45,6 @@ def selectObject(object, *kwargs, **cond):
 def updateObject(object, updateDict):
     db.session.query(object).update(updateDict)
     commitChanges()
+
+def getAccountsList(account, mac):
+    return [u.__dict__ for u in db.session.query(account).filter_by(macAddress=mac).all()]

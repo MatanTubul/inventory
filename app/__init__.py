@@ -27,6 +27,7 @@ from controllers.devices import devices
 from controllers.reset_password import reset_password
 from controllers.login import login
 from controllers.sign_up import sign_up
+from controllers.accounts import account
 
 app.register_blueprint(report)
 app.register_blueprint(history)
@@ -35,4 +36,5 @@ app.register_blueprint(devices)
 app.register_blueprint(reset_password)
 app.register_blueprint(login)
 app.register_blueprint(sign_up)
+app.register_blueprint(account)
 
