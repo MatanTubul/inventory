@@ -50,6 +50,14 @@ apps = {
   "Yahoo": {
     "username": "",
     "password": ""
+  },
+  "SnapChat": {
+    "username": "",
+    "password": ""
+  },
+  "Icloud": {
+    "username": "",
+    "password": ""
   }
 }
 @account.route('/loadAccounts/<mac>/<account>/<dname>')
@@ -59,9 +67,10 @@ def loadAccounts(mac, account, dname):
     """
     try :
         accounts = getAccountsList(Account, mac)
-        if len(accounts ) < 1:
+        if len(accounts) < 1:
             createBaseAccount(mac, account)
             accounts = getAccountsList(Account, mac)
+
         return render_template('accounts.html', accounts=accounts, mac=mac, device_name= dname, account=account)
     except Exception as e:
         logger.warning(e)

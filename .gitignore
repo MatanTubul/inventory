@@ -3,3 +3,5 @@
 *.pyc
 wintventory.log
 
+!/wintventory.wintego.key.pem
+!/wintventory.wintego.pem
